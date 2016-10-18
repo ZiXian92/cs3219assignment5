@@ -27,4 +27,4 @@ CI is done using free account on Shippable. CI tests are triggered only during p
 
 ## FAQs
 1. **Typescript compiler doesn't recognize a NodeJS module.**  
-Probably it requires Typescript definition type for that module. Search for the module with `typings search <module_name>`. Then install using `typings install --save --global <module_name>`. Example for Mocha is `typings install --save --global dt~mocha`. Then in the affected code, add `/// <reference path="<relative path to .d.ts file>" />` at the top.
+Probably it requires type definition for that module. Google around for module `@types/<module_name>`. If it exists, run `npm install --save-dev @types/<module_name>`. Otherwise, Google around(not sure of any standard way to resolve this).
