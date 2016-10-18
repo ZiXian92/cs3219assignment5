@@ -19,9 +19,16 @@
   "homepage": "https://github.com/ZiXian92/cs3219assignment5#readme",
   "dependencies": {
     "bluebird": "^3.4.6",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-router": "^2.8.1"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "@types/react": "^0.14.41",
+    "@types/react-dom": "^0.14.18",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
     "typescript": "^2.0.3",
