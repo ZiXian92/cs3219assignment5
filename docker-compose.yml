@@ -1,0 +1,9 @@
+version: '2'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: tail -f /etc/hosts
+    volumes:
+      - ./:/src:rw
