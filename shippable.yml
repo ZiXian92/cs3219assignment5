@@ -1,3 +1,5 @@
 language: node_js
+env:
+  - XUNIT_FILE=shippable/testresults/result.xml
 script:
   - npm test
