@@ -5,6 +5,8 @@
  * @author zixian92
  */
 
+import Repository from '../dataentities/repository';
+
 export default class RepoLinkParser {
   private static prefix: string = 'https://github.com/';
   private static format: string = 'https://github.com/<owner>/<repo>';
@@ -12,9 +14,9 @@ export default class RepoLinkParser {
   /**
    * Extracts repo owner and repo name from given repo URL.
    * @param {string} url of the format https:/github.com/<owner>/<repo>
-   * @return {{owner: string, repo: string}} or null if error occurred.
+   * @return Repository? returns null if error occurred
    */
-  getRepoFromURL(url:string){
+  getRepoFromURL(url:string): Repository {
     if(!url.startsWith(RepoLinkParser.prefix)){
       console.log(`URL should be of the format: ${RepoLinkParser.format}`);
       return null;
@@ -24,9 +26,6 @@ export default class RepoLinkParser {
       console.log(`URL should be of the format: ${RepoLinkParser.format}`);
       return null;
     }
-    return {
-      owner: parts[0],
-      repo: parts[1]
-    };
+    return new Repository(parts[0], parts[1]);
   }
 }
