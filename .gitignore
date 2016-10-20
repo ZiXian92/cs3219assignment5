@@ -2,3 +2,4 @@ node_modules/
 compiled/
 typings/
 dist/
+src/app/app.secret.ts
