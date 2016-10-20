@@ -1,0 +1,23 @@
+<h1>Git Guard</h1>
+<div *ngIf="!isLoggedIn">
+	<h2>To begin</h2>
+	<button (click)="goToGithubAuthentication()">Login with GitHub</button>
+</div>
+
+<div *ngIf="isLoggedIn">
+	<h2>Welcome, User!</h2>
+	<h3>Enter a link for a Github repository</h3>
+	<p>Don't worry, you can change it later</p>
+
+	<form (ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm">
+		<div>
+			<input type="text" 
+				id="githubRepoLink" 
+				[(ngModel)]="githubRepoLink" 
+				name="githubRepoLink"
+				required/>
+		</div>
+		<button type="submit">Start Guarding!</button>
+	</form>
+
+</div>
