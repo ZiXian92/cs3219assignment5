@@ -2,11 +2,16 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "moduleResolution": "node",
     "removeComments": true,
-    "jsx": "react",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "outDir": "compiled"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "typings/globals/**/*",
+    "typings/index.d.ts"
   ]
 }
