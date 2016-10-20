@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --inline --progress --port 8080",
+    "prestart": "tsc && rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "start": "node compiled/server/app.js",
     "test": "mocha 'compiled/tests/**/*.js'",
-    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "build-dev": "rimraf dist && webpack --config config/webpack.dev.js --progress --profile --bail",
+    "dev-server": "tsc && node compiled/server/app.js",
     "postinstall": "typings install",
     "pretest": "tsc"
   },
@@ -30,9 +32,13 @@
     "@angular/platform-browser-dynamic": "~2.1.0",
     "@angular/router": "~3.1.0",
     "@angular/upgrade": "^2.1.0",
+    "@types/body-parser": "0.0.33",
     "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
     "core-js": "^2.4.1",
+    "express": "^4.14.0",
     "isomorphic-fetch": "^2.2.1",
+    "moment": "^2.15.1",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.25"
@@ -40,6 +46,7 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/core-js": "^0.9.34",
+    "@types/express": "^4.0.33",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.45",
     "angular2-template-loader": "^0.4.0",

@@ -7,3 +7,6 @@ services:
     command: tail -f /etc/hosts
     volumes:
       - ./:/src:rw
+    ports:
+      - "8080:8080"
+      - "80:7777"
