@@ -1,5 +1,8 @@
 /**
  * Defines the functions for redis client.
+ * Note that this redis client is not the promisified one
+ * as promisifying with bluebird is not supported in Typescript.
+ *
  * @author zixian92
  */
 
@@ -24,5 +27,3 @@ export function connectToRedisAndDo(job: (conn: RedisClient) => Promise<any>): P
   // return Promise.using(getClient(), job);
   return job(redisClient);
 }
-
-connectToRedisAndDo((conn) => Promise.resolve());
