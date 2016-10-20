@@ -4,20 +4,11 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'dashboard',
-    template: `
-    	<h1>Dashboard</h1>
-    	<button (click)="logout()">Logout</button>
-    `
+    templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent{
 	constructor(
     	private userService: UserService,
     	private router: Router
    	) {}
-
-	logout(): void {
-		this.userService.logout();
-		this.router.navigate(['login']);
-	}
-
 }

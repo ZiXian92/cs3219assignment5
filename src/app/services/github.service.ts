@@ -27,4 +27,8 @@ export class GithubService {
   setGithubRepoLink(githubRepoLink: string): void {
     this.githubRepoLink = githubRepoLink;
   }
+
+  getGithubRepoLink(): string {
+    return this.githubRepoLink;
+  }
 }

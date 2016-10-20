@@ -1,0 +1,6 @@
+<h1>Git Guard is guarding 
+	<span *ngIf="!isEdit">{{githubRepoLink}}</span>
+</h1>
+<input *ngIf="isEdit" [(ngModel)]="githubRepoLink" type="text"/>  
+<button *ngIf="!isEdit" (click)="editGithubRepoLink()">Edit</button>
+<button *ngIf="isEdit" (click)="saveGithubRepoLink()">Done</button>
