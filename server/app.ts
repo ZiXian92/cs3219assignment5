@@ -5,8 +5,12 @@
  */
 
 'use strict';
+import 'angular2-universal-polyfills';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+// import { createEngine } from 'angular2-express-engine';
+// import { ViewRenderer } from './viewrenderer';
+import { AppModule } from '../src/app/app.module';
 
 class Server {
   private static METHOD_GET: string = 'GET';
@@ -42,7 +46,7 @@ class Server {
   /**
    * Adds route handler for given path with given request type.
    */
-  private addRouteHandler(routePath: string, method: string, handler: (req: express.Request, res: express.Response, next?: express.NextFunction) => void): void {
+  private addRouteHandler(routePath: string, method: string, handler: express.RequestHandler): void {
     switch(method){
       case Server.METHOD_GET: this.app.get(routePath, handler); break;
       case Server.METHOD_POST: this.app.post(routePath, handler); break;
@@ -74,6 +78,20 @@ class Server {
   }
 
   /**
+   * Sets the rendering engine for the given file extension.
+   */
+  public setEngine(ext: string, engine: any): void {
+    this.app.engine(ext, engine);
+  }
+
+  /**
+   * Sets mapped value of key to the given value.
+   */
+  public set(key: string, val: any): void {
+    this.app.set(key, val);
+  }
+
+  /**
    * Starts the server instance.
    */
   public run(): void {
@@ -82,7 +100,18 @@ class Server {
 }
 
 var app = new Server();
-app.addMiddleware(express.static('./dist'));
+// app.setEngine('.html', createEngine({
+//   precompile: true,
+//   ngModule: AppModule
+// }));
+// app.set('views', './dist');
+// app.set('view engine', 'html');
+app.addMiddleware(express.static('./dist', {index: false}));
 app.addMiddleware(bodyParser.json());
+app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));
+// app.addGetRoute('*', ViewRenderer);
+app.addGetRoute('*', (req: express.Request, res: express.Response, next: express.NextFunction): any => {
+  res.status(200).sendFile('index.html', { root: './dist/' });
+});
 app.run();
