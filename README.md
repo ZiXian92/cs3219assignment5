@@ -10,12 +10,29 @@ Can't think of a good description here.
 root
 |_ datalogic // All data manipulation/computation logic components here
 |_ tests // All unit tests here
+|_ server // Server-side code here
+|_ src  // Angular2 and other front-end code here
+|_ config // Webpack configuration files here
 ```
+
+## Local Setup
+1. Clone the repository.
+2. Change directory to project root.
+3. Run `npm install`.
+4> Run `typings install`.
 
 ## Docker Setup
 1. Clone the repository.
 2. Change directory to project root and run `docker-compose up -d --build`.
 3. Enter the container with `docker-compose exec app bash` to run any Typescript compilation or Mocha tests(`npm test`).
+4. Run `npm install`.
+5. Run `typings install`.
+
+## Workflow
+1. Work on a branch that is not `master` or `develop` to avoid polluting them with conflicts or broken code.
+2. Keep your branch up-to-date by running `git fetch origin`, `git rebase origin/develop`.
+3. After pulling from upstream, run `npm install && typings install` in your chosen setup.
+4. Create pull request to `develop` when done. Merge only happens after passing CI.
 
 ## Testing Single Unit Test File
 1. In the NodeJS environment(local or Docker), run `tsc`, followed by `mocha compiled/tests/<compiled_test_file_path>`.
