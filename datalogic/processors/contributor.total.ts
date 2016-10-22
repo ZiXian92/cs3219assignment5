@@ -9,9 +9,20 @@ import * as Promise from 'bluebird';
 import { ContributorTotalStats } from '../../dataentities/contributor.total.stats';
 
 export function computeContributorTotal(contributorData: any): ContributorTotalStats[] {
-  return [{
-    contributor: 'octocat', commits: 300, additions: 200, deletions: 0
-  }, {
-    contributor: 'cutedog', commits: 2, additions: 5, deletions: 100
-  }]
+  return contributorData.map((c: any) => {
+    if(!c.author || !c.author.login || !c.total || !Array.isArray(c.weeks)) return null;
+    let summary = c.weeks.reduce((res: any, w: any): any => {
+      let commit: number = parseInt(w.c);
+      let addition: number = parseInt(w.a);
+      let deletion: number = parseInt(w.d);
+      res.commits+=isNaN(commit)? 0: commit;
+      res.additions+=isNaN(addition)? 0: addition;
+      res.deletions+=isNaN(deletion)? 0: deletion;
+      return res;
+    }, {
+      commits: 0, additions: 0, deletions: 0
+    });
+    summary.contributor = c.author.login;
+    return summary;
+  }).filter((c: ContributorTotalStats): boolean => !!c);
 }
