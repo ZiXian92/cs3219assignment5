@@ -25,7 +25,7 @@ export class PromisePipe {
    * Passes the data through the series of transformations
    * specified in the constructor.
    */
-  public processData(data: any): Thenable<any> {
+  public processData(data?: any): Thenable<any> {
     return this._filters.reduce(
       (curPromise: Thenable<any>, nextFilter: DataTransformer) => curPromise.then(nextFilter),
       resolve(data));
