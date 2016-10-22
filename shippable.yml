@@ -11,5 +11,4 @@ install:
   - typings install
 
 script:
-  - npm run webpack-build
   - npm test
