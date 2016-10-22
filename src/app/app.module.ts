@@ -4,6 +4,7 @@ import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { MaterialModule } from '@angular/material';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { routing } from './app.routing';
@@ -28,6 +29,7 @@ import { AuthenticationGuard } from './services/authentication.guard';
     DashboardModule,
     NgbModule.forRoot(),
     ChartsModule,
+    MaterialModule.forRoot(),
     routing
   ],
   declarations: [

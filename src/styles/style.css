@@ -1,0 +1,57 @@
+commit-history #fromDate .input-group-addon,
+commit-history #toDate .input-group-addon {
+    padding: 0 10 0 10;
+    cursor: pointer;
+}
+
+multi-select button {
+    cursor: pointer;
+}
+
+file-select .main-container {
+    border: 2px solid #DDDDDD;
+    border-radius: 5px;
+}
+
+file-select .file-list {
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;   
+}
+
+file-select .link,
+file-select .path {
+    border-width: 0 0 2 0;
+    border-color: #DDDDDD;
+    border-style: solid;
+}
+
+file-select .link:last-child {
+    border-width: 0px;
+}
+
+file-select .path {
+    background-color: #e6f1f6;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+file-select .link {
+    color: #0275d8;
+    cursor: pointer;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+
+file-select .link .icon {
+    padding-right: 5px;
+}
+
+file-select .selected {
+    background-color: #eaffea;
+}
+
+file-select .link:hover:not(.selected) {
+    background-color: rgb(235,236,237);
+}

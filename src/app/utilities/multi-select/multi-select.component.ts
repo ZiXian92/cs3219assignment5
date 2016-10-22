@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { State } from '../../class/state';
 
 @Component({
   selector: 'multi-select',
   templateUrl: 'multi-select.component.html'
 })
 
-export class MultiSelectComponent implements OnInit{
+export class MultiSelectComponent implements OnInit {
   constructor() {}
 
   @Input() itemList: any[];

@@ -7,6 +7,8 @@ import "../styles/bootstrap-flex.min.css";
 import "../styles/bootstrap-grid.min.css";
 import "../styles/bootstrap-reboot.min.css";
 
+import "../styles/style.css";
+
 // To import external JS libraries
 // Heres to 3 hours of my time...
 import "../../node_modules/chart.js/src/chart.js";

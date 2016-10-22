@@ -36,8 +36,8 @@ export class CommitHistoryComponent implements OnInit {
     var currentDate = new Date();
     var bootstrapCurrentDate = {
       year: currentDate.getFullYear(),
-      month: currentDate.getMonth(),
-      day: currentDate.getDay()
+      month: currentDate.getMonth() + 1,
+      day: currentDate.getDate()
     }
     this.fromDateModel = bootstrapCurrentDate;
     this.toDateModel = bootstrapCurrentDate;

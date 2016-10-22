@@ -1,4 +1,3 @@
-<h3>Commit History</h3>
 <div *ngIf="!showVisualization">
   <form class="form-inline">
     <div class="form-group pr-50">
@@ -6,7 +5,7 @@
       <div id="fromDate" class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd" name="fromDatePicker" [(ngModel)]="fromDateModel" ngbDatepicker #fromDatePicker="ngbDatepicker" required>
         <div class="input-group-addon" (click)="fromDatePicker.toggle()" >
-          <img style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+          <md-icon>date_range</md-icon>
         </div>
       </div>
     </div>
@@ -16,7 +15,7 @@
       <div id="toDate" class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd" name="toDatePicker" [(ngModel)]="toDateModel" ngbDatepicker #toDatePicker="ngbDatepicker" required>
         <div class="input-group-addon" (click)="toDatePicker.toggle()" >
-          <img style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+          <md-icon>date_range</md-icon>
         </div>
       </div>
     </div>
@@ -24,21 +23,20 @@
 
   <div class="row">
     <div 
-      class="col-xs-3"
-      style="height: 400px; overflow-y: auto;">
+      class="col-xs-3">
       <h5>Select member(s)</h5>
       <multi-select [itemList]="memberList" [(selectedItemList)]="selectedMemberList" #ms></multi-select>
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary" (click)="visualizeCommitHistory()">Visualize</button>
+  <button type="submit" class="btn btn-outline-success" (click)="visualizeCommitHistory()">Visualize</button>
   <span *ngIf="showError">
-    Please fill the form first!
+    Please finish the setup first!
   </span>
 </div>
 
 <div *ngIf="showVisualization">
-  <button class="btn btn-primary" (click)="goToSetup()">Back to setup</button>
+  <button class="btn btn-secondary" (click)="goToSetup()">Back to setup</button>
 
   <div class="row">
     <div class="col-xs-6">

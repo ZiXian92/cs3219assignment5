@@ -1,0 +1,31 @@
+<div class="main-container container-fluid">
+    <div class="row">
+        <div class="col-xs-12 path">
+            <span>{{currentFilePath}}</span>
+        </div>
+    </div>
+
+    <div class="file-list row">
+        <div class="col-xs-12">
+            <div *ngIf="previousFileLists.length > 0" class="row link">
+                <div class="col-xs-12" (click)="backTrack()">
+                    <a>..</a>
+                </div>
+            </div>
+
+            <div *ngFor="let file of currentFileList" 
+                class="row link flex-items-xs-middle"
+                (click)="selectFile(file)"
+                [ngClass]="{'selected': fileSelect.file === file}">
+                <div
+                    class="icon">
+                    <md-icon *ngIf="file.type === 'tree'">folder</md-icon>
+                    <md-icon *ngIf="file.type === 'blob'">insert_drive_file</md-icon>
+                </div>
+                <div>
+                    <a>{{file.name}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

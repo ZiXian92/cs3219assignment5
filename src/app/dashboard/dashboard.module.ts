@@ -3,6 +3,7 @@ import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { MaterialModule } from '@angular/material';
 
 import { DashboardRouting } from './dashboard.routing';
 
@@ -12,6 +13,7 @@ import { FileHistoryComponent } from './file-history/file-history.component';
 import { SubscribeComponent } from './subscribe/subscribe.component';
 
 import { MultiSelectComponent } from '../utilities/multi-select/multi-select.component';
+import { FileSelectComponent } from '../utilities/file-select/file-select.component';
 
 import { GithubService } from '../services/github.service';
 
@@ -23,6 +25,7 @@ import { GithubService } from '../services/github.service';
     FormsModule,
     NgbModule,
     ChartsModule,
+    MaterialModule.forRoot(),
     DashboardRouting
   ],
   declarations: [
@@ -30,7 +33,8 @@ import { GithubService } from '../services/github.service';
     CommitHistoryComponent,
     FileHistoryComponent,
     SubscribeComponent,
-    MultiSelectComponent
+    MultiSelectComponent,
+    FileSelectComponent
   ],
   providers: [
     GithubService
