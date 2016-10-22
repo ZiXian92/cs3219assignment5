@@ -11,6 +11,7 @@ import * as express from 'express';
 // import { createEngine } from 'angular2-express-engine';
 // import { ViewRenderer } from './viewrenderer';
 import { AppModule } from '../src/app/app.module';
+import { APIRouter } from './api/apirouter';
 
 class Server {
   private static METHOD_GET: string = 'GET';
@@ -111,6 +112,7 @@ app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));
 // app.addGetRoute('*', ViewRenderer);
+app.addRoute('/api', APIRouter);
 app.addGetRoute('*', (req: express.Request, res: express.Response, next: express.NextFunction): any => {
   res.status(200).sendFile('index.html', { root: './dist/' });
 });
