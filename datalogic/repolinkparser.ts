@@ -5,9 +5,9 @@
  * @author zixian92
  */
 
-import Repository from '../dataentities/repository';
+import { Repository } from '../dataentities/repository';
 
-export default class RepoLinkParser {
+export class RepoLinkParser {
   private static prefix: string = 'https://github.com/';
   private static format: string = 'https://github.com/<owner>/<repo>';
 
@@ -26,6 +26,6 @@ export default class RepoLinkParser {
       console.log(`URL should be of the format: ${RepoLinkParser.format}`);
       return null;
     }
-    return new Repository(parts[0], parts[1]);
+    return { owner: parts[0], name: parts[1] };
   }
 }

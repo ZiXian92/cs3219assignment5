@@ -6,9 +6,9 @@
  */
 
 'use strict';
-import * as Promise from 'bluebird';
-import Repository from '../../dataentities/repository';
+import { Thenable } from 'bluebird';
+import { RepoRequest } from '../../dataentities/repo.data.request';
 
-export interface GitDataFetcher {
-  get(repo: Repository): Promise.Thenable<any>;
+export interface RepoDataFetcher {
+  (repo: RepoRequest): Thenable<any>;
 }
