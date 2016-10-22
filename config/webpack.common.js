@@ -41,6 +41,10 @@ module.exports = {
     ]
   },
 
+  node: {
+    fs: "empty"
+  },
+
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
