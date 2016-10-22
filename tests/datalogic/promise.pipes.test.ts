@@ -41,9 +41,11 @@ describe('PromisePipeTest', () => {
     );
 
     it('only 1st filter should be executed', () => {
-      pipe.processData(1).then(() => assert.fail(), (err: string) => assert.equal(err, 'Fail at B'));
-      assert.equal(results.length, expectedResult.length);
-      results.forEach((r: string, i: number): void => assert.strictEqual(r, expectedResult[i]));
+      pipe.processData(1).then(() => assert.fail(), (err: string) => {
+        assert.equal(err, 'Fail at B');
+        assert.equal(results.length, expectedResult.length);
+        results.forEach((r: string, i: number): void => assert.strictEqual(r, expectedResult[i]));
+      });
     });
   });
 });
