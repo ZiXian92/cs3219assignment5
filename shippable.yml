@@ -4,6 +4,7 @@ env:
 
 before_install:
   - npm install -g npm@next
+  - npm install -g typings
 
 install:
   - npm install
