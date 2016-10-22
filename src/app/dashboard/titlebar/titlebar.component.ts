@@ -22,7 +22,7 @@ export class TitlebarComponent implements OnInit{
 		this.isEdit = true;
 	}
 
-	saveGithubRepoLink(): void {
+	setGithubRepoLink(): void {
 		this.isEdit = false;
 		this.githubService.setGithubRepoLink(this.githubRepoLink);
 	}

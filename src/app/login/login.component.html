@@ -1,23 +1,40 @@
-<h1>Git Guard</h1>
-<div *ngIf="!isLoggedIn">
-	<h2>To begin</h2>
-	<button (click)="goToGithubAuthentication()">Login with GitHub</button>
-</div>
+<div class="container-fluid">
+	<div class="row h-100 flex-items-xs-middle">
+		<div class="container">
+			<div class="row flex-items-xs-center">
+				<h1>Git Guard</h1>
+			</div>
 
-<div *ngIf="isLoggedIn">
-	<h2>Welcome, User!</h2>
-	<h3>Enter a link for a Github repository</h3>
-	<p>Don't worry, you can change it later</p>
+			<div *ngIf="!isLoggedIn" class="row flex-items-xs-center">
+				<div class="card card-block">
+					<h3 class="card-title text-xs-center">Moving your project forward</h3>
+					<h5 class="text-xs-center text-justify">Git Guard helps you to easily keep track of who's working and who's not. 
+					</h5>
+					<p class="text-xs-center text-justify">Simply login to your Github account, pass us your repository link and get started!</p>
+					<button (click)="goToGithubAuthentication()" class="btn btn-block btn-primary">Continue with GitHub</button>
+				</div>
+			</div>
 
-	<form (ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm">
-		<div>
-			<input type="text" 
-				id="githubRepoLink" 
-				[(ngModel)]="githubRepoLink" 
-				name="githubRepoLink"
-				required/>
+			<div *ngIf="isLoggedIn">
+				<form (ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm" class="col-xs-8">
+					<h3>Welcome, User!</h3>
+					<h5>Enter a link for a Github repository</h5>
+					<p><i>Don't worry, you can change it later</i></p>
+					<div class="input-group">
+						<input 
+							type="text" 
+							id="githubRepoLink" 
+							name="githubRepoLink"
+							class="form-control" 
+							placeholder="Github Repository Link"
+							[(ngModel)]="githubRepoLink" 
+							required>
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="submit">Start Guarding!</button>
+						</span>
+					</div>
+				</form>
+			</div>
 		</div>
-		<button type="submit">Start Guarding!</button>
-	</form>
-
+	</div>
 </div>

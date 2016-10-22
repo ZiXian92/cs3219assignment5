@@ -1,0 +1,10 @@
+<div class="list-group">
+  <button 
+    *ngFor="let select of selectList"
+    type="button"
+    class="list-group-item list-group-item-action"
+    [ngClass]="{'active': select.selected}"
+    (click)="selectItem(select)">
+    {{select.name}}
+  </button>
+</div>

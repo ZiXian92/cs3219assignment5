@@ -1,2 +1,10 @@
-<button *ngFor="let state of stateList"
-	(click)="goTo(state)">{{state.name}}</button>
+<ul class="nav nav-pills nav-stacked">
+	<li *ngFor="let state of stateList" class="nav-item">
+		<a 
+			class="nav-link"
+			[routerLink]="[state.route]"
+			[routerLinkActive]="['active']">
+			{{state.name}}
+		</a>
+	</li>
+</ul>

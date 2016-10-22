@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { routing } from './app.routing';
-
 import { secret } from './app.secret'
 
 import { AppComponent } from './app.component';
@@ -25,6 +26,8 @@ import { AuthenticationGuard } from './services/authentication.guard';
     BrowserModule,
     FormsModule,
     DashboardModule,
+    NgbModule.forRoot(),
+    ChartsModule,
     routing
   ],
   declarations: [

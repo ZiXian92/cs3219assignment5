@@ -1,1 +1,58 @@
-Commit History
+<h3>Commit History</h3>
+<div *ngIf="!showVisualization">
+  <form class="form-inline">
+    <div class="form-group pr-50">
+      <label for="fromDate"><h5>From</h5></label>
+      <div id="fromDate" class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" name="fromDatePicker" [(ngModel)]="fromDateModel" ngbDatepicker #fromDatePicker="ngbDatepicker" required>
+        <div class="input-group-addon" (click)="fromDatePicker.toggle()" >
+          <img style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="toDate"><h5>To</h5></label>
+      <div id="toDate" class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" name="toDatePicker" [(ngModel)]="toDateModel" ngbDatepicker #toDatePicker="ngbDatepicker" required>
+        <div class="input-group-addon" (click)="toDatePicker.toggle()" >
+          <img style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div 
+      class="col-xs-3"
+      style="height: 400px; overflow-y: auto;">
+      <h5>Select member(s)</h5>
+      <multi-select [itemList]="memberList" [(selectedItemList)]="selectedMemberList" #ms></multi-select>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" (click)="visualizeCommitHistory()">Visualize</button>
+  <span *ngIf="showError">
+    Please fill the form first!
+  </span>
+</div>
+
+<div *ngIf="showVisualization">
+  <button class="btn btn-primary" (click)="goToSetup()">Back to setup</button>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div style="display: block;">
+        <canvas baseChart width="400" height="400"
+          [datasets]="lineChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColors"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType">            
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+</div>

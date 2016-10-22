@@ -1,4 +1,4 @@
-import {Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -25,10 +25,11 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     this.isLoggedIn = this.userService.isLoggedIn();
+    console.log(this.isLoggedIn);
 
     // Check if user is already authenticated
     if(this.isLoggedIn) {
-      this.router.navigate(["/dashboard"]);
+      //this.router.navigate(["/dashboard"]);
     }
 
     // Attempts to get an authentication code from Github
@@ -51,6 +52,7 @@ export class LoginComponent implements OnInit {
   }
 
   goToGithubAuthentication(): void {
+    console.log(this.githubService.getAuthenticationUrl());
     window.location.href = this.githubService.getAuthenticationUrl();
   }
 

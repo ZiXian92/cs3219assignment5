@@ -1,3 +1,13 @@
-<titlebar></titlebar>
-<sidebar></sidebar>
-<router-outlet></router-outlet>
+
+<div class="container-fluid">
+	<titlebar class="row"></titlebar>
+
+	<div class="row">
+		<div class="col-xs-2">
+			<sidebar [stateList]="stateList"></sidebar>
+		</div>
+		<div class="col-xs-10">
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+</div>
