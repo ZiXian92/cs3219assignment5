@@ -2,6 +2,9 @@ language: node_js
 env:
   - XUNIT_FILE=shippable/testresults/result.xml
 
+before_install:
+  - npm install -g npm@next
+
 install:
   - npm install
   - typings install
