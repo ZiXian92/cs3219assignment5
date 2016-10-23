@@ -8,8 +8,10 @@
 import { Router } from 'express';
 import { ContributorRouter } from './contributors';
 import { RepoRouter } from './repository';
+import { UserRouter } from './users';
 
 export const APIRouter: Router = Router();
 
 APIRouter.use('/contributors', ContributorRouter);
 APIRouter.use('/repos', RepoRouter);
+APIRouter.use('/users', UserRouter);

@@ -16,5 +16,9 @@ export const RepoRouter: Router = Router();
 
 RepoRouter.get('/:owner', (req: Request, res: Response, next: NextFunction): void => {
   new PromisePipe(getRepos, formatReposList).processData(req.params.owner)
-    .then((repos: Repository[]): any => res.json(repos));
+    .then((repos: Repository[]): any => res.json(repos), (err: any): void => {
+      console.log('Error getting user repositories.');
+      console.log(err);
+      res.json([]);
+    });
 });
