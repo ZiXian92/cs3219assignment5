@@ -1,12 +1,9 @@
-
 <div class="container-fluid">
-	<titlebar class="row"></titlebar>
+	<titlebar></titlebar>
 
 	<div class="row">
-		<div class="col-xs-2">
-			<sidebar [stateList]="stateList"></sidebar>
-		</div>
-		<div class="col-xs-10">
+		<sidebar class="left-side col-xs-1" [stateList]="stateList"></sidebar>
+		<div class="content col-xs-11">
 			<router-outlet></router-outlet>
 		</div>
 	</div>

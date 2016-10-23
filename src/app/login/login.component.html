@@ -1,40 +1,57 @@
 <div class="container-fluid">
 	<div class="row h-100 flex-items-xs-middle">
 		<div class="container">
-			<div class="row flex-items-xs-center">
-				<h1>Git Guard</h1>
-			</div>
-
-			<div *ngIf="!isLoggedIn" class="row flex-items-xs-center">
-				<div class="card card-block">
-					<h3 class="card-title text-xs-center">Moving your project forward</h3>
-					<h5 class="text-xs-center text-justify">Git Guard helps you to easily keep track of who's working and who's not. 
-					</h5>
-					<p class="text-xs-center text-justify">Simply login to your Github account, pass us your repository link and get started!</p>
-					<button (click)="goToGithubAuthentication()" class="btn btn-block btn-primary">Continue with GitHub</button>
-				</div>
-			</div>
-
-			<div *ngIf="isLoggedIn">
-				<form (ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm" class="col-xs-8">
-					<h3>Welcome, User!</h3>
-					<h5>Enter a link for a Github repository</h5>
-					<p><i>Don't worry, you can change it later</i></p>
-					<div class="input-group">
-						<input 
-							type="text" 
-							id="githubRepoLink" 
-							name="githubRepoLink"
-							class="form-control" 
-							placeholder="Github Repository Link"
-							[(ngModel)]="githubRepoLink" 
-							required>
-						<span class="input-group-btn">
-							<button class="btn btn-primary" type="submit">Start Guarding!</button>
-						</span>
+			<div class="row">
+				<div class="col-xs-8 login-main">
+					<div class="row">
+						<h1 class="logo">Git Guard</h1>
 					</div>
-				</form>
+					<img class="inspecto-cat" src="../../assets/inspectocat.png">
+					<div class="row" *ngIf="!isLoggedIn">
+						<h4 class="sub-text"><b>Moving your project forward</b></h4>
+					</div>
+					<div class="row" *ngIf="!isLoggedIn">
+						<h5 class="sub-text">Git Guard helps you to easily keep track of who's working and who's not.</h5> 
+					</div>
+					<div class="row" *ngIf="!isLoggedIn">
+						<p class="sub-text"><i>Simply login to your Github account to get started!</i></p>
+					</div>
+					<div class="row" *ngIf="!isLoggedIn">
+						<button (click)="goToGithubAuthentication()" class="btn btn-block btn-github">Continue with GitHub</button>
+					</div>
+
+					<form 
+						class="container-fluid"
+						*ngIf="isLoggedIn"
+						(ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm">
+						<div class="row">
+							<h4 class="sub-text"><b>Welcome, User!</b></h4>
+						</div>
+						<div class="row">
+							<h5 class="sub-text">Enter a link for a Github repository</h5>
+						</div>
+						<div class="row">
+							<p class="sub-text"><i>Don't worry, you can change it later</i></p>
+						</div>
+						<div class="row">
+							<div class="col-xs-9 githubRepoLinkCol">
+								<input 
+								type="text" 
+								id="githubRepoLink" 
+								name="githubRepoLink"
+								class="form-control" 
+								placeholder="Github Repository Link"
+								[(ngModel)]="githubRepoLink" 
+								required>
+							</div>
+							<div class="col-xs-3 githubRepoLinkCol">
+								<button class="btn btn-github" type="submit">Start Guarding!</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="octocat-copyright">Super awesome <a target="_blank" href="https://octodex.github.com/inspectocat">Inspectocat</a> by <a target="_blank" href="https://github.com/jasoncostello">Jason Costello</a> via Octodex</div>
 </div>
