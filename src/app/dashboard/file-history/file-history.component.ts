@@ -27,8 +27,7 @@ export class FileHistoryComponent implements OnInit {
       toLine: null 
     }
 
-    // Rmb to change back and remove this comment
-    this. showVisualization = true;
+    this.showVisualization = false;
 
     this.showError = false;
   }

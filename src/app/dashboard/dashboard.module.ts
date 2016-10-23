@@ -14,6 +14,7 @@ import { SubscribeComponent } from './subscribe/subscribe.component';
 
 import { MultiSelectComponent } from '../utilities/multi-select/multi-select.component';
 import { FileSelectComponent } from '../utilities/file-select/file-select.component';
+import { FileChangesComponent } from '../utilities/file-changes/file-changes.component';
 
 import { GithubService } from '../services/github.service';
 
@@ -34,7 +35,8 @@ import { GithubService } from '../services/github.service';
     FileHistoryComponent,
     SubscribeComponent,
     MultiSelectComponent,
-    FileSelectComponent
+    FileSelectComponent,
+    FileChangesComponent
   ],
   providers: [
     GithubService

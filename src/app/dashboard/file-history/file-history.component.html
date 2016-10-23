@@ -50,11 +50,11 @@
 <template [ngIf]="showVisualization">
     <button class="btn btn-secondary" (click)="goToSetup()">Back to setup</button>
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-2">
             Commit History for file
         </div>
-        <div class="col-xs-6">
-            File Changes {{patch}}
+        <div class="col-xs-10">
+            <file-changes [fileChanges]="patch"></file-changes>
         </div>
     </div>
 </template>
