@@ -8,10 +8,6 @@
 import { Thenable } from 'bluebird';
 import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 
-export function getRepos(): Thenable<any> {
-  return getJson('https://api.github.com/repositories')
-    .then((res: FetchResponse): any => {
-      console.log(res.headers);
-      return res.body;
-    });
+export function getRepos(owner: string): Thenable<any> {
+  return getJson(`https://api.github.com/users/${owner}/repos`).then((res: FetchResponse): any[] => res.body);
 }
