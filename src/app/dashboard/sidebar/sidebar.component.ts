@@ -16,4 +16,9 @@ export class SidebarComponent {
   ) {}
 
   @Input() stateList: [State];
+
+  logout() :void {
+      this.userService.logout();
+      this.router.navigate(['login']);
+  }
 }

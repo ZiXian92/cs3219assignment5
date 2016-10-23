@@ -26,16 +26,20 @@ export class DashboardComponent {
    	// List of states to pass into sidebar
     private stateList:[State] = [{
         route: "contributions",
-        name: "Contributions"
+        name: "Contributions",
+        icon: "supervisor_account"
     }, {
         route: "commit-history",
-        name: "Commit History"
+        name: "Commit History",
+        icon: "alarm"
     }, {
         route: "file-history",
-        name: "File History"
+        name: "File History",
+        icon: "insert_drive_file"
     }, {
         route: "subscribe",
-        name: "Subscribe"
+        name: "Subscribe",
+        icon: "notifications"
     }];
 
 	private activeState: State;

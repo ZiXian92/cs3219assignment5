@@ -1,10 +1,20 @@
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-pills nav-stacked h-100">
 	<li *ngFor="let state of stateList" class="nav-item">
-		<a 
+		<div 
 			class="nav-link"
 			[routerLink]="[state.route]"
 			[routerLinkActive]="['active']">
-			{{state.name}}
-		</a>
+			<md-icon class="d-block">{{state.icon}}</md-icon>
+            <p>{{state.name}}</p>
+		</div>
 	</li>
+
+    <li class="nav-item" (click)="logout()">
+        <div 
+            class="nav-link">
+            <md-icon class="d-block">arrow_back</md-icon>
+            <p>Logout</p>
+        </div>
+    </li>
 </ul>
+
