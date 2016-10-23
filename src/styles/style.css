@@ -1,3 +1,112 @@
+login > .container-fluid {
+    background-image: url("../assets/background.jpg");
+    background-size: cover;
+}
+
+login .login-main {
+    position: relative;
+    background-color: rgba(252,208,89,0.9);
+    padding: 30px;
+    border-radius: 15px;
+}
+
+login .inspecto-cat {
+    position: absolute;
+    top: -263px;
+    right: -50px;
+    height: 400px;
+    width: auto;
+}
+
+login .logo {
+    font-family: "Montserrat";
+    font-size: 4em;
+    padding-bottom: 20px;
+}
+
+login .sub-text {
+    font-family: "Merriweather";   
+}
+
+login form {
+    padding: 0 !important;
+}
+
+login .githubRepoLinkCol {
+    padding: 0 !important;
+}
+
+login .btn-github {
+    color: #FFFFFF;
+    background-color: #7a3497 !important;
+}
+
+login .octocat-copyright {
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+login .octocat-copyright a{
+    color: #A2D7D8;
+}
+
+dashboard .content {
+    padding-top: 15px;
+}
+
+dashboard .left-side {
+    background-color: #FFEA73;
+}
+
+titlebar h1 {
+    font-family: "Montserrat";
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+titlebar .main {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    position: relative;
+    z-index: 1;
+}
+
+sidebar {
+    padding: 0 !important;
+}
+
+sidebar {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+sidebar .nav-item {
+    margin: 0;
+    cursor: pointer;
+}
+
+sidebar .nav-link {
+    border-radius: 0 !important;
+}
+
+sidebar .nav-link.active {
+    background-color: #373a3c !important;
+}
+
+sidebar md-icon {
+    height: 50px;
+    width: 50px;
+    font-size: 50px !important;
+    margin: 0 auto;
+}
+
+sidebar p {
+    margin: 0;
+    text-align: center;
+    overflow: hidden;
+}
+
 commit-history #fromDate .input-group-addon,
 commit-history #toDate .input-group-addon {
     padding: 0 10 0 10;
@@ -54,4 +163,66 @@ file-select .selected {
 
 file-select .link:hover:not(.selected) {
     background-color: rgb(235,236,237);
+}
+
+file-changes .main {
+    font-size: 14;
+    font-family: 'consolas';
+    overflow-x: auto;
+    border-radius: 5px;
+}
+
+file-changes .index {
+    min-width: 40px;
+    text-align: right;
+    padding: 0px 5px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0;
+    flex: 0;
+}
+
+file-changes :not(.metadata) > .index {
+    border-style: solid;
+    border-width: 0 0 0 1;
+    border-color: #DDDDDD;
+}
+
+file-changes :not(.metadata) > .text {
+    border-style: solid;
+    border-width: 0 0 0 1;
+    border-color: #DDDDDD;
+}
+
+file-changes pre {
+    white-space: pre-wrap;
+    margin: 0px;
+}
+
+file-changes .row {
+    border-style: solid;
+    border-width: 0 1 0 0;
+    border-color: #DDDDDD;   
+}
+
+file-changes .metadata {
+    background-color: #D5FFFF;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #DDDDDD;
+}
+
+file-changes .new {
+    background-color: #D9FBD9;
+}
+
+file-changes .old {
+    background-color: #FFD7C1;
+}
+
+subscribe .logo {
+    font-family: "Montserrat";
+}
+
+subscribe p {
+    margin-bottom: 0.5rem;
 }
