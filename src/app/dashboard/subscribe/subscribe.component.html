@@ -1,1 +1,41 @@
-Subscribe
+<h3>Subscribe to <span class="logo">Git Guard</span>!</h3>
+<p>You will receive reminders once a week to check back to Git Guard</p>
+<p>Add your friends in and we'll keep them in the loop too!</p>
+
+<div class="row">
+    <div class="col-xs-3">
+        <input 
+            class="form-control" 
+            type="email" 
+            placeholder="john.doe@gitguard.com" 
+            *ngFor="let email of emails; let i = index; trackBy: trackByIndex"
+            [(ngModel)]="emails[i]"
+            required/>
+    </div>
+
+    <div class="col-xs-1">
+        <button 
+            class="btn btn-secondary"
+            (click)="addField()">
+            <md-icon>add</md-icon>
+        </button>
+
+        <button 
+            *ngIf="emails.length > 1" 
+            class="btn btn-secondary"
+            (click)="removeField(email)">
+            <md-icon>remove</md-icon>
+        </button>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-3">
+        <button 
+            class="btn btn-success"
+            (click)="subscribe()">
+            Subscribe
+        </button>
+        <span *ngIf="showError">Please make sure all of the emails are valid</span>
+    </div>
+</div>
