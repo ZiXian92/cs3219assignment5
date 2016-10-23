@@ -18,8 +18,13 @@ export interface RequestHeaders {
   [headerName: string]: string;
 }
 
+export interface FetchResponse {
+  headers: IHeaders,
+  body: any
+}
+
 /**
- * Sends a GET request.
+ * Sends a GET request to receive text data.
  * GET requests only has at most some headers.
  */
 export function get(url: string, headers?: RequestHeaders): Thenable<any> {
@@ -28,5 +33,26 @@ export function get(url: string, headers?: RequestHeaders): Thenable<any> {
     headers,
     mode: 'cors',
     cache: 'default'
-  }).then((res: IResponse): Thenable<any> => res.ok? res.json(): reject(res));
+  }).then((res: IResponse): Thenable<any> => res.ok? res.text().then((body: any): FetchResponse => ({
+    headers: res.headers,
+    body
+  })): reject(res));
+}
+
+/**
+ * Sends a GET request to receive JSON data.
+ * GET requests only has at most some headers.
+ */
+export function getJson(url: string, headers?: RequestHeaders): Thenable<any> {
+  headers = headers || {};
+  headers['Accept'] = 'application/json';
+  return fetch(url, {
+    method: 'GET',
+    headers,
+    mode: 'cors',
+    cache: 'default'
+  }).then((res: IResponse): Thenable<any> => res.ok? res.json().then((body: any): FetchResponse => ({
+    headers: res.headers,
+    body
+  })): reject(res));
 }

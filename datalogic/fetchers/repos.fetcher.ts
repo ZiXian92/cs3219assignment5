@@ -6,8 +6,12 @@
 
 'use strict';
 import { Thenable } from 'bluebird';
-import { get } from '../../misc/fetch.wrapper';
+import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 
 export function getRepos(): Thenable<any> {
-  return get('https://api.github.com/repositories');
+  return getJson('https://api.github.com/repositories')
+    .then((res: FetchResponse): any => {
+      console.log(res.headers);
+      return res.body;
+    });
 }
