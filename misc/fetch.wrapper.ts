@@ -8,7 +8,7 @@
  */
 
 'use strict';
-import { reject, Thenable } from 'bluebird';
+import * as Promise from 'bluebird';
 import * as fetch from 'isomorphic-fetch';
 
 /**
@@ -26,33 +26,37 @@ export interface FetchResponse {
 /**
  * Sends a GET request to receive text data.
  * GET requests only has at most some headers.
+ * Resolves with string.
+ * Rejects with IResponse object.
  */
-export function get(url: string, headers?: RequestHeaders): Thenable<any> {
-  return fetch(url, {
+export function get(url: string, headers?: RequestHeaders): Promise<any> {
+  return new Promise((resolve, reject) => fetch(url, {
     method: 'GET',
     headers,
     mode: 'cors',
     cache: 'default'
-  }).then((res: IResponse): Thenable<any> => res.ok? res.text().then((body: any): FetchResponse => ({
+  }).then((res: IResponse): any => res.ok? res.text().then((body: string): void => resolve({
     headers: res.headers,
     body
-  })): reject(res));
+  })): reject(res)));
 }
 
 /**
  * Sends a GET request to receive JSON data.
  * GET requests only has at most some headers.
+ * Resolves with JSON object.
+ * Rejects with IResponse object.
  */
-export function getJson(url: string, headers?: RequestHeaders): Thenable<any> {
+export function getJson(url: string, headers?: RequestHeaders): Promise<any> {
   headers = headers || {};
   headers['Accept'] = 'application/json';
-  return fetch(url, {
+  return new Promise((resolve, reject) => fetch(url, {
     method: 'GET',
     headers,
     mode: 'cors',
     cache: 'default'
-  }).then((res: IResponse): Thenable<any> => res.ok? res.json().then((body: any): FetchResponse => ({
+  }).then((res: IResponse): any => res.ok? res.json().then((body: any): void => resolve({
     headers: res.headers,
     body
-  })): reject(res));
+  })): reject(res)));
 }

@@ -6,9 +6,9 @@
 
 'use strict';
 import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
-import { Thenable } from 'bluebird';
+import * as Promise from 'bluebird';
 
-export function getUsers(): Thenable<any> {
+export function getUsers(): Promise<any> {
   let users: any[] = [];
   function handleResponse(res: FetchResponse): any {
     // users = users.concat(res.body);
