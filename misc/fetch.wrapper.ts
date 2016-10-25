@@ -60,3 +60,41 @@ export function getJson(url: string, headers?: RequestHeaders): Promise<any> {
     body
   })): reject(res)));
 }
+
+/**
+ * POST request that parses response body as string.
+ * Resolves to string.
+ * Rejects as IResponse object.
+ */
+export function post(url: string, body: any, headers?: RequestHeaders): Promise<any> {
+  return new Promise((resolve, reject) =>
+    fetch(url, {
+      method: 'POST',
+      headers,
+      mode: 'cors',
+      cache: 'no-cache'
+    }).then((res: IResponse): any => res.ok? res.text().then((body: string): void => resolve({
+      headers: res.headers,
+      body
+    })): reject(res)));
+}
+
+/**
+ * POST request that parses response body as JSON.
+ * Resolves as JSON object.
+ * Rejects as IResponse object.
+ */
+export function postGetJson(url: string, body: any, headers?: RequestHeaders): Promise<any> {
+  headers = headers || {};
+  headers['Accept'] = 'application/json';
+  return new Promise((resolve, reject) =>
+    fetch(url, {
+      method: 'POST',
+      headers,
+      mode: 'cors',
+      cache: 'no-cache'
+    }).then((res: IResponse): any => res.ok? res.json().then((body: any): void => resolve({
+      headers: res.headers,
+      body
+    })): reject(res)));
+}
