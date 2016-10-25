@@ -8,7 +8,8 @@
 import * as Promise from 'bluebird';
 import { ContributorTotalStats } from '../../dataentities/contributor.total.stats';
 
-export function computeContributorTotal(contributorData: any): ContributorTotalStats[] {
+export function computeContributorTotal(contributorData: any[]): ContributorTotalStats[] {
+  if(!Array.isArray(contributorData)) throw 'Contributor data is not array';
   return contributorData.map((c: any) => {
     if(!c.author || !c.author.login || !c.total || !Array.isArray(c.weeks)) return null;
     let summary = c.weeks.reduce((res: any, w: any): any => {
