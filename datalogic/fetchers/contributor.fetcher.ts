@@ -5,12 +5,12 @@
  */
 
 'use strict';
-import { Thenable } from 'bluebird';
-import { get } from '../../misc/fetch.wrapper';
+import * as Promise from 'bluebird';
+import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 import { RepoRequest } from '../../dataentities/repo.data.request';
 import { RepoDataFetcher } from './repo.data.fetcher';
 
-export function getContributors(reqData: RepoRequest): Thenable<any> {
+export function getContributors(reqData: RepoRequest): Promise<any> {
   let url = `https://api.github.com/repos/${reqData.repo.owner}/${reqData.repo.name}/stats/contributors`;
-  return get(url);
+  return getJson(url).then((res: FetchResponse): any[] => res.body);
 }

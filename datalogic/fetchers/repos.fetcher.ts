@@ -5,9 +5,9 @@
  */
 
 'use strict';
-import { Thenable } from 'bluebird';
-import { get } from '../../misc/fetch.wrapper';
+import * as Promise from 'bluebird';
+import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 
-export function getRepos(): Thenable<any> {
-  return get('https://api.github.com/repositories');
+export function getRepos(owner: string): Promise<any> {
+  return getJson(`https://api.github.com/users/${owner}/repos`).then((res: FetchResponse): any[] => res.body);
 }

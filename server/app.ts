@@ -12,6 +12,7 @@ import * as express from 'express';
 // import { ViewRenderer } from './viewrenderer';
 import { AppModule } from '../src/app/app.module';
 import { APIRouter } from './api/apirouter';
+import { OAuthRedirectHandler } from './auth/oauth';
 
 class Server {
   private static METHOD_GET: string = 'GET';
@@ -108,12 +109,13 @@ var app = new Server();
 // app.set('views', './dist');
 // app.set('view engine', 'html');
 app.addMiddleware(express.static(__dirname + '/public'));
+app.addMiddleware((req, res, next) => { console.log(req.url); next(); });
 app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));
 // app.addGetRoute('*', ViewRenderer);
 app.addRoute('/api', APIRouter);
-
+app.addGetRoute('/auth/oauth', OAuthRedirectHandler);
 app.addGetRoute('*', (req: express.Request, res: express.Response, next: express.NextFunction): any => {
   res.status(200).sendFile('index.html', { root: __dirname + '/public' });
 });

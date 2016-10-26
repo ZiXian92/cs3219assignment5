@@ -6,9 +6,9 @@
  */
 
 'use strict';
-import { Thenable } from 'bluebird';
+import * as Promise from 'bluebird';
 import { RepoRequest } from '../../dataentities/repo.data.request';
 
 export interface RepoDataFetcher {
-  (repo: RepoRequest): Thenable<any>;
+  (repo: RepoRequest): Promise<any>;
 }

@@ -6,7 +6,8 @@
  */
 
 'use strict';
-import { Thenable, resolve } from 'bluebird';
+// import { Thenable, resolve } from 'bluebird';
+import * as Promise from 'bluebird';
 import { DataTransformer } from './data.transformer';
 
 export class PromisePipe {
@@ -25,9 +26,9 @@ export class PromisePipe {
    * Passes the data through the series of transformations
    * specified in the constructor.
    */
-  public processData(data?: any): Thenable<any> {
+  public processData(data?: any): Promise<any> {
     return this._filters.reduce(
-      (curPromise: Thenable<any>, nextFilter: DataTransformer) => curPromise.then(nextFilter),
-      resolve(data));
+      (curPromise: Promise<any>, nextFilter: DataTransformer) => curPromise.then(nextFilter),
+      Promise.resolve(data));
   }
 }
