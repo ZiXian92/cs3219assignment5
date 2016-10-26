@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node compiled/server/app.js",
+    "start": "tsc && npm run dev-server",
+    "build": "npm run webpack-build & tsc",
     "test": "mocha 'compiled/tests/**/*.js'",
     "postinstall": "typings install",
     "pretest": "tsc",
-    "dev-server": "tsc && node compiled/server/app.js",
+    "dev-server": "node compiled/server/app.js",
     "webpack": "webpack-dev-server --inline --progress --port 8080",
-    "webpack-build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
+    "webpack-build": "rimraf compiled/server/public && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
   "repository": {
     "type": "git",

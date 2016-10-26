@@ -107,13 +107,14 @@ var app = new Server();
 // }));
 // app.set('views', './dist');
 // app.set('view engine', 'html');
-app.addMiddleware(express.static('./dist', {index: false}));
+app.addMiddleware(express.static(__dirname + '/public'));
 app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));
 // app.addGetRoute('*', ViewRenderer);
 app.addRoute('/api', APIRouter);
+
 app.addGetRoute('*', (req: express.Request, res: express.Response, next: express.NextFunction): any => {
-  res.status(200).sendFile('index.html', { root: './dist/' });
+  res.status(200).sendFile('index.html', { root: __dirname + '/public' });
 });
 app.run();

@@ -4,6 +4,7 @@ Can't think of a good description here.
 ## Development System Requirements
 - NodeJS with `mocha`, `typescript` and `typings` installed globally OR  
 - Docker and Docker-Compose
+- `rimraf` package installed globally
 
 ## Directory Structure
 ```
