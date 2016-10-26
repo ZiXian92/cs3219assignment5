@@ -109,6 +109,7 @@ var app = new Server();
 // app.set('views', './dist');
 // app.set('view engine', 'html');
 app.addMiddleware(express.static(__dirname + '/public'));
+app.addMiddleware((req, res, next) => { console.log(req.url); next(); });
 app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));

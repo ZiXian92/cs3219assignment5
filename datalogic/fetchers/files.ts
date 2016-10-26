@@ -10,6 +10,6 @@ import { RepoRequest } from '../../dataentities/repo.data.request';
 import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 
 export function getFiles(req: RepoRequest): any {
-  return getJson(`https://api.github.com/repos/${req.repo.owner}/${req.repo.name}/git/trees/req.branch?recursive=1`)
+  return getJson(`https://api.github.com/repos/${req.repo.owner}/${req.repo.name}/git/trees/${req['branch']}?recursive=1`)
   .then((res: FetchResponse): any => res.body);
 }
