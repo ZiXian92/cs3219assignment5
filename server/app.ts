@@ -8,6 +8,7 @@
 import 'angular2-universal-polyfills';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as session from 'express-session';
 // import { createEngine } from 'angular2-express-engine';
 // import { ViewRenderer } from './viewrenderer';
 import { AppModule } from '../src/app/app.module';
@@ -108,6 +109,9 @@ var app = new Server();
 // }));
 // app.set('views', './dist');
 // app.set('view engine', 'html');
+app.addMiddleware(session({
+  secret: 'cs3219GitGuard'
+}));
 app.addMiddleware(express.static(__dirname + '/public'));
 app.addMiddleware((req, res, next) => { console.log(req.url); next(); });
 app.addMiddleware(bodyParser.json());

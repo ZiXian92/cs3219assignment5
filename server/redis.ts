@@ -13,17 +13,23 @@ import * as Promise from 'bluebird';
 const HOST = 'redis';
 const PORT = 6379;
 
-var redisClient: RedisClient = createClient(PORT, HOST);
+// var redisClient: RedisClient = createClient(PORT, HOST);
 // redisClient.on('error', (err: any) => console.log(`Redis error: ${err}`));
-redisClient.on('end', () => console.log('Redis connection closed'));
+// redisClient.on('end', () => console.log('Redis connection closed'));
 
 function getClient(): Promise.Disposer<RedisClient> {
-  return new Promise((resolve, reject) => resolve(redisClient)).disposer((conn: RedisClient, promise: Promise<any>) => {
+  return new Promise((resolve, reject) => {
+    var client = createClient(PORT, HOST);
+    client.on('error', (err: any) => console.log(`Redis error: ${err}`));
+    client.on('end', () => console.log('Redis connection closed'));
+    resolve(client);
+  }).disposer((conn: RedisClient, promise: Promise<any>) => {
     conn.quit();
+    console.log('Connection closed');
   });
 }
 
 export function connectToRedisAndDo(job: (conn: RedisClient) => Promise<any>): Promise<any> {
-  // return Promise.using(getClient(), job);
-  return job(redisClient);
+  return Promise.using(getClient(), job);
+  // return job(redisClient);
 }
