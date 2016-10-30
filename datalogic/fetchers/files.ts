@@ -11,5 +11,7 @@ import { getJson, FetchResponse } from '../../misc/fetch.wrapper';
 
 export function getFiles(req: RepoRequest): any {
   return getJson(`https://api.github.com/repos/${req.repo.owner}/${req.repo.name}/git/trees/${req['branch']}?recursive=1`)
-  .then((res: FetchResponse): any => res.body);
+  .then((res: FetchResponse): any => {
+    console.log(`Truncated: ${res.body.truncated}`); return res.body;
+  });
 }
