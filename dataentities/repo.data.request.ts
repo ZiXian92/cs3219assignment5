@@ -11,6 +11,6 @@ import { Repository } from './repository';
 
 export interface RepoRequest {
   readonly repo: Repository;
-  readonly requestor?: string;
-  [propName: string]: any;
+  requestor?: string;
+  data?: any
 }

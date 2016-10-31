@@ -10,6 +10,7 @@ import { ContributorRouter } from './contributors';
 import { RepoRouter } from './repository';
 import { UserRouter } from './users';
 import { FilesRouter } from './files';
+import { CommitsRouter } from './commits';
 
 export const APIRouter: Router = Router();
 
@@ -17,3 +18,4 @@ APIRouter.use('/contributors', ContributorRouter);
 APIRouter.use('/repos', RepoRouter);
 APIRouter.use('/users', UserRouter);
 APIRouter.use('/trees', FilesRouter);
+APIRouter.use('/commits', CommitsRouter);

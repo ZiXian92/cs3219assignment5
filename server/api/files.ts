@@ -20,7 +20,9 @@ export const FilesRouter = Router();
 FilesRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextFunction): void => {
   let reqData: RepoRequest = {
     repo: { owner: req.params.owner, name: req.params.repo },
-    branch: req.query.branch || 'master'
+    data: {
+      branch: req.query.branch || 'master'
+    }
   };
   let redisKey: string = `/api/trees/${reqData.repo.owner}/${reqData.repo.name}?breanch=${reqData['branch']}`;
   let ttl: number = 3600;
