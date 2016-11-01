@@ -6,6 +6,7 @@
 'use strict';
 import { Router, Request, Response, NextFunction } from 'express';
 import * as Promise from 'bluebird';
+import * as moment from 'moment';
 import { RedisClient } from 'redis';
 import { connectToRedisAndDo } from '../redis';
 import { RepoRequest } from '../../dataentities/repo.data.request';
@@ -44,6 +45,8 @@ CommitsRouter.get('/:owner/:repo/changes', (req: Request, res: Response, next: N
         };
         if(!reqObj.token) delete reqObj.token;
         for(var k in reqObj.data) if(!reqObj.data[k]) delete reqObj.data[k];
+        if(!!reqObj.data.since) reqObj.data.since = moment(reqObj.data.since).format();
+        if(!!reqObj.data.until) reqObj.data.until = moment(reqObj.data.until).format();
         return new PromisePipe(getCommits, getCommitUrls, createResponseWrapper(reqObj), getCommitDetails, processCommitDetails)
         .processData(<RepoRequest>reqObj)
         .then((commits: any[]): any =>
