@@ -14,6 +14,7 @@ import * as session from 'express-session';
 import { AppModule } from '../src/app/app.module';
 import { APIRouter } from './api/apirouter';
 import { OAuthRedirectHandler } from './auth/oauth';
+import { JwtExtractor } from './auth/jwt/jwt.extractor';
 
 class Server {
   private static METHOD_GET: string = 'GET';
@@ -109,11 +110,12 @@ var app = new Server();
 // }));
 // app.set('views', './dist');
 // app.set('view engine', 'html');
-app.addMiddleware(session({
-  secret: 'cs3219GitGuard'
-}));
+// app.addMiddleware(session({
+//   secret: 'cs3219GitGuard'
+// }));
 app.addMiddleware(express.static(__dirname + '/public'));
 app.addMiddleware((req, res, next) => { console.log(req.url); next(); });
+app.addMiddleware(JwtExtractor);
 app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
 // app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));

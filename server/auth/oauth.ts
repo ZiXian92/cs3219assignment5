@@ -7,6 +7,7 @@
 'use strict';
 import { RedisClient } from 'redis';
 import * as Promise from 'bluebird';
+import { generateToken } from './jwt/jwt.wrapper';
 import { Request, Response, NextFunction } from 'express';
 import { getJson, postGetJson } from '../../misc/fetch.wrapper';
 import { secret } from '../../src/app/app.secret';
@@ -22,11 +23,13 @@ export function OAuthRedirectHandler(req: Request, res: Response, next: NextFunc
     getJson('https://api.github.com/user', {Authorization: `token ${tokenObj.accessToken}`})
     .then((userObj: any): string => userObj.login)
     .then((username: string) => {
-      req.session['name'] = username;
       return connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
         conn.set(username, tokenObj.accessToken, (err: any): any => err? reject(err): resolve())
-      ))
-    }).then((): any => res.redirect('/'))
+      )).then((): void => {
+        let token: string = generateToken({ user: username });
+        res.redirect(`/setup?token=${token}`);
+      });
+    })
   ).catch((err: any): void => {
     console.log(err);
     res.status(401);
