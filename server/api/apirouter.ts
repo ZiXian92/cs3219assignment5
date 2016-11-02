@@ -11,6 +11,7 @@ import { RepoRouter } from './repository';
 import { UserRouter } from './users';
 import { FilesRouter } from './files';
 import { CommitsRouter } from './commits';
+import { MeRouter } from './me';
 
 export const APIRouter: Router = Router();
 
