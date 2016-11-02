@@ -1,3 +1,7 @@
+body {
+    font-size: 1.5vw;
+}
+
 login > .container-fluid {
     background-image: url("../assets/background.jpg");
     background-size: cover;
@@ -12,9 +16,9 @@ login .login-main {
 
 login .inspecto-cat {
     position: absolute;
-    top: -263px;
-    right: -50px;
-    height: 400px;
+    top: -164px;
+    right: -34px;
+    height: 250px;
     width: auto;
 }
 
@@ -166,7 +170,7 @@ file-select .link:hover:not(.selected) {
 }
 
 file-changes .main {
-    font-size: 14;
+    font-size: 1em;
     font-family: 'consolas';
     overflow-x: auto;
     border-radius: 5px;

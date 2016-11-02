@@ -29,36 +29,12 @@ export class LoginComponent implements OnInit {
 
     // Check if user is already authenticated
     if(this.isLoggedIn) {
-      //this.router.navigate(["/dashboard"]);
+      this.router.navigate(["/setup"]);
     }
-
-    // Attempts to get an authentication code from Github
-    this.activatedRoute.queryParams.subscribe(
-      (queryParam: any) => {
-        let githubCode = queryParam['code'];
-        // If code is given
-        if(githubCode) {
-          // Get access token
-          this.githubService.getAccessToken(githubCode).then((response) => {
-            let accessToken = response;
-            // Login and save access token
-            this.userService.login(accessToken);
-
-            // Show UI for Github repository link
-            this.isLoggedIn = true;
-          });
-        }
-    });
   }
 
   goToGithubAuthentication(): void {
     console.log(this.githubService.getAuthenticationUrl());
     window.location.href = this.githubService.getAuthenticationUrl();
-  }
-
-  // Sets the Github repository link and redirect to dashboard
-  onLinkFormSubmit(): void {
-    this.githubService.setGithubRepoLink(this.githubRepoLink);
-    this.router.navigate([""])
   }
 }

@@ -1,17 +1,27 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { Subject } from 'rxjs';
-import { secret } from '../app.secret';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable()
 export class GithubService implements OnInit {
 
-  constructor(private http: Http, private secret: secret) {}
+  constructor(private http: Http) {}
 
   private githubRepoLink: string;
+  private token: string;
+
+  private SERVER_API = {
+    serverUrl: "http://localhost:7777/api",
+    contributors: "/contributors/owner/repo",
+    contributorsSummary: "/contributors/owner/repo/summary",
+    weeklyContributions: "/contributors/owner/repo/weekly",
+    fileListing: "/trees/owner/repo?branch=",
+    detailedCommits: "/commits/owner/repo/changes?branch=&path=&author=&since=&until="
+  }
 
   private GITHUB_API = {
-    authenticationUrl: "https://github.com/login/oauth/authorize?"
+    authenticationUrl: "https://github.com/login/oauth/authorize?",
+    githubClientId: "2863ec632b3f7cad7e6f"
   };
 
   // Expose an observable for our githubRepoLink using Rxjs' BehaviorSubject
@@ -24,13 +34,7 @@ export class GithubService implements OnInit {
 
   getAuthenticationUrl() {
     return this.GITHUB_API.authenticationUrl
-        + "client_id=" + this.secret.getGithubClientId();
-  }
-
-  getAccessToken(githubCode: string): Promise<string> {
-     return new Promise((resolve, reject) => {
-       resolve("dummyToken");
-     });
+        + "client_id=" + this.GITHUB_API.githubClientId;
   }
 
   setGithubRepoLink(githubRepoLink: string): void {
@@ -47,4 +51,16 @@ export class GithubService implements OnInit {
       this.githubRepoLinkSource.next(githubRepoLink);  
     }
   }
+
+  setToken(token: string): void {
+    this.token = token;
+  }
+
+  callApi(apiString: string): Observable<any> {
+    return this.http.get(apiString)
+    .map(function(response) {
+      return response.json() || { };
+    });
+  }
+
 }

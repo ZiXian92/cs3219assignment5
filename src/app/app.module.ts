@@ -8,10 +8,11 @@ import { MaterialModule } from '@angular/material';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { routing } from './app.routing';
-import { secret } from './app.secret'
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { SetupComponent } from './setup/setup.component';
+
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TitlebarComponent } from './dashboard/titlebar/titlebar.component';
 import { SidebarComponent } from './dashboard/sidebar/sidebar.component';
@@ -35,6 +36,7 @@ import { AuthenticationGuard } from './services/authentication.guard';
   declarations: [
     AppComponent,
     LoginComponent,
+    SetupComponent,
     DashboardComponent,
     TitlebarComponent,
     SidebarComponent
@@ -42,8 +44,7 @@ import { AuthenticationGuard } from './services/authentication.guard';
   providers: [
     UserService,
     GithubService,
-    AuthenticationGuard,
-    secret
+    AuthenticationGuard
   ]
 })
 export class AppModule { }
