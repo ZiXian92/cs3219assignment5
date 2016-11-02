@@ -12,6 +12,7 @@ import * as Promise from 'bluebird';
 
 const HOST = 'redis';
 const PORT = 6379;
+const useCache: boolean = true;
 
 // var redisClient: RedisClient = createClient(PORT, HOST);
 // redisClient.on('error', (err: any) => console.log(`Redis error: ${err}`));
@@ -30,6 +31,6 @@ function getClient(): Promise.Disposer<RedisClient> {
 }
 
 export function connectToRedisAndDo(job: (conn: RedisClient) => Promise<any>): Promise<any> {
-  return Promise.using(getClient(), job);
+  return useCache? Promise.using(getClient(), job): Promise.resolve();
   // return job(redisClient);
 }
