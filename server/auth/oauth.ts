@@ -14,25 +14,27 @@ import { secret } from '../secret';
 import { connectToRedisAndDo } from '../redis';
 
 export function OAuthRedirectHandler(req: Request, res: Response, next: NextFunction){
-  let code: string = req.query.code;
-  let state: string = req.query.state;
   let s: secret = new secret();
-  let body: string = `client_id=${s.getGithubClientId}&client_secret=${s.getGithubClientSecret}&code=${code}&state=${state}&redirect_uri=http://localhost/auth/oauth`;
-  postGetJson('https://github.com/login/oauth/access_token', encodeURIComponent(body))
-  .then(tokenObj =>
-    getJson('https://api.github.com/user', {Authorization: `token ${tokenObj.accessToken}`})
+  let code: string = req.query.code;
+  let body: any = {
+    client_id: s.getGithubClientId(), client_secret: s.getGithubClientSecret(),
+    redirect_uri: 'http://localhost:7777/auth/oauth', code
+  };
+  postGetJson('https://github.com/login/oauth/access_token', JSON.stringify(body), {'Content-Type': 'application/json'})
+  .then(response => {
+    let tokenObj: any = response.body;
+    return getJson('https://api.github.com/user', {Authorization: `token ${tokenObj.access_token}`})
     .then((userObj: any): string => userObj.login)
     .then((username: string) => {
       return connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-        conn.set(username, tokenObj.accessToken, (err: any): any => err? reject(err): resolve())
+        conn.set(username, tokenObj.access_token, (err: any): any => err? reject(err): resolve())
       )).then((): void => {
         let token: string = generateToken({ user: username });
         res.redirect(`/setup?token=${token}`);
       });
     })
-  ).catch((err: any): void => {
-    console.log(err);
-    res.status(401);
+  }).catch((err: any): void => {
+    err.text().then(body => console.log(body));
+    res.sendStatus(401);
   });
-  // res.status(404).send('Not implemented');
 }
