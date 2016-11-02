@@ -104,22 +104,17 @@ class Server {
 }
 
 var app = new Server();
-// app.setEngine('.html', createEngine({
-//   precompile: true,
-//   ngModule: AppModule
-// }));
-// app.set('views', './dist');
-// app.set('view engine', 'html');
-// app.addMiddleware(session({
-//   secret: 'cs3219GitGuard'
-// }));
+
+app.addMiddleware((req: express.Request, res: express.Response, next: express.NextFunction): void => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.addMiddleware(express.static(__dirname + '/public'));
 app.addMiddleware((req, res, next) => { console.log(req.url); next(); });
 app.addMiddleware(JwtExtractor);
 app.addMiddleware(bodyParser.json());
 app.addMiddleware(bodyParser.urlencoded({extended: false}));
-// app.addGetRoute('/sayhello', (req, res, next) => res.send('Hello'));
-// app.addGetRoute('*', ViewRenderer);
 app.addRoute('/api', APIRouter);
 app.addGetRoute('/auth/oauth', OAuthRedirectHandler);
 app.addGetRoute('*', (req: express.Request, res: express.Response, next: express.NextFunction): any => {
