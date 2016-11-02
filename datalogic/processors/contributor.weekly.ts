@@ -15,7 +15,7 @@ export function weeklyContributions(contributors: any[]): any[] {
       weeks: c.weeks.map((w: any): any => {
         if(!w.w) return null;
         return {
-          week: moment(w.w).format(),
+          week: moment.unix(w.w).format(),
           additions: isNaN(w.a)? 0: parseInt(w.a),
           deletions: isNaN(w.d)? 0: parseInt(w.d),
           commits: isNaN(w.c)? 0: parseInt(w.c)

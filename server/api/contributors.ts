@@ -75,6 +75,8 @@ ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next
   let redisKey: string = `/api/contributors/${repo.owner}/${repo.name}/weekly`;
   let ttl: number = 3600;
   let user: string = req['user']? req['user'].user: null;
+  let reqObj: RepoRequest = { repo };
+  if(user) reqObj.requestor = user;
   console.log(user);
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
     conn.get(redisKey, (err: any, val: string): any => err? reject(err): resolve(val))
