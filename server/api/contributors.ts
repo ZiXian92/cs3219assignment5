@@ -14,6 +14,7 @@ import { ContributorTotalStats } from '../../dataentities/contributor.total.stat
 import { getContributors } from '../../datalogic/fetchers/contributor.fetcher';
 import { computeContributorTotal } from '../../datalogic/processors/contributor.total';
 import { extractContributorName } from '../../datalogic/processors/contributor.name';
+import { weeklyContributions } from '../../datalogic/processors/contributor.weekly';
 import { PromisePipe } from '../../datalogic/promise.pipe';
 import { connectToRedisAndDo } from '../redis';
 
@@ -40,7 +41,7 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
       .then((): any => res.json(contributors)));
   }).catch((err: any): void => {
     console.log(err);
-    res.status(500);
+    res.sendStatus(500);
   });
 });
 
@@ -65,6 +66,31 @@ ContributorRouter.get('/:owner/:repo/summary', (req: Request, res: Response, nex
       ));
     }
   }).catch((err: any): void => {
-    console.log(err); res.status(500);
+    console.log(err); res.sendStatus(500);
+  });
+});
+
+ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next: NextFunction): void => {
+  let repo: Repository = { owner: req.params.owner, name: req.params.repo };
+  let redisKey: string = `/api/contributors/${repo.owner}/${repo.name}/weekly`;
+  let ttl: number = 3600;
+  let user: string = req['user']? req['user'].user: null;
+  let reqObj: RepoRequest = { repo };
+  if(user) reqObj.requestor = user;
+  console.log(user);
+  connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
+    conn.get(redisKey, (err: any, val: string): any => err? reject(err): resolve(val))
+  )).then((val: string): any => {
+    if(val) return res.json(JSON.parse(val));
+    return new PromisePipe(getContributors, weeklyContributions).processData({ repo })
+    .then((contributors: any[]): void => {
+      connectToRedisAndDo((conn:RedisClient): Promise<any> => new Promise((resolve, reject): any =>
+        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())
+      ));
+      res.json(contributors);
+    });
+  }).catch((err: any): void => {
+    console.log(err);
+    res.sendStatus(500);
   });
 });
