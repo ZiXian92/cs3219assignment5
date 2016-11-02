@@ -10,7 +10,7 @@ import * as Promise from 'bluebird';
 import { generateToken } from './jwt/jwt.wrapper';
 import { Request, Response, NextFunction } from 'express';
 import { getJson, postGetJson } from '../../misc/fetch.wrapper';
-import { secret } from '../../src/app/app.secret';
+import { secret } from '../secret';
 import { connectToRedisAndDo } from '../redis';
 
 export function OAuthRedirectHandler(req: Request, res: Response, next: NextFunction){

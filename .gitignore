@@ -3,3 +3,4 @@ compiled/
 typings/
 dist/
 src/app/app.secret.ts
+server/secret.ts
