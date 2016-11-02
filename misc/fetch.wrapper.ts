@@ -72,7 +72,8 @@ export function post(url: string, body: any, headers?: RequestHeaders): Promise<
       method: 'POST',
       headers,
       mode: 'cors',
-      cache: 'no-cache'
+      cache: 'no-cache',
+      body
     }).then((res: IResponse): any => res.ok? res.text().then((body: string): void => resolve({
       headers: res.headers,
       body
@@ -87,7 +88,6 @@ export function post(url: string, body: any, headers?: RequestHeaders): Promise<
 export function postGetJson(url: string, body: any, headers?: RequestHeaders): Promise<any> {
   headers = headers || {};
   headers['Accept'] = 'application/json';
-  // console.log(headers);
   return new Promise((resolve, reject) =>
     fetch(url, {
       method: 'POST',
