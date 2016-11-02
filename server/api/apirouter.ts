@@ -20,3 +20,4 @@ APIRouter.use('/repos', RepoRouter);
 APIRouter.use('/users', UserRouter);
 APIRouter.use('/trees', FilesRouter);
 APIRouter.use('/commits', CommitsRouter);
+APIRouter.use('/me', MeRouter);

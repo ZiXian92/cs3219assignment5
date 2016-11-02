@@ -9,8 +9,9 @@ import { Router, Request, Response, NextFunction } from 'express';
 
 export const MeRouter = Router();
 
-MeRouter.get('/me', (req: Request, res: Response, next: NextFunction): void => {
-  let username: string = req['user'].user;
-  if(!username) res.status(401);
-  else res.json(username);
+MeRouter.get('/', (req: Request, res: Response, next: NextFunction): void => {
+  let user: any = req['user'];
+  console.log(user);
+  if(!user) res.sendStatus(401);
+  else res.json(user.user);
 });
