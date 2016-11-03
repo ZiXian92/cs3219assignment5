@@ -23,20 +23,13 @@ export class SetupComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    this.isLoggedIn = this.userService.isLoggedIn();
-    // Check if user is authenticated
-    if(!this.isLoggedIn) {
-      this.router.navigate(["/login"]);
-    }
-
-    // Attempts to get an authentication code from Github
+    // Attempts to get token from server
     this.activatedRoute.queryParams.subscribe(
       (queryParam: any) => {
         let token = queryParam['token'];
         // If token is given
         if(token) {
-          this.githubService.setToken(token);
+          this.userService.login(token);
         }
     });
   }

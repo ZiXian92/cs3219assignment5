@@ -32,7 +32,8 @@ FilesRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextFunctio
     if(treeStr){
       return res.json(JSON.parse(treeStr));
     } else{
-      return new PromisePipe(getFiles, extractFilePaths).processData(reqData)
+      return new PromisePipe(getFiles).processData(reqData)
+      //return new PromisePipe(getFiles, extractFilePaths).processData(reqData)
       .then((filePaths: string[]): Promise<any> =>
         connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
           conn.setex(redisKey, ttl, JSON.stringify(filePaths), (err: any): any => err? reject(err): resolve())

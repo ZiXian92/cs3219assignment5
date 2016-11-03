@@ -1,38 +1,57 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
     selector: 'file-changes',
     templateUrl: 'file-changes.component.html'
 })
-export class FileChangesComponent implements OnInit {
+export class FileChangesComponent implements OnChanges {
 	constructor(
    	) {}
 
     @Input() fileChanges: string;
 
     private lines = [];
+    private  showError;
 
-    ngOnInit() :void {
-        this.lines = this.parseFileChanges(this.fileChanges);
+    ngOnChanges(changes) :void {
+        let fileChanges = changes.fileChanges.currentValue;
+        if(fileChanges) {
+            this.showError = false;
+            this.lines = this.parseFileChanges(fileChanges);
+        } else {
+            this.showError = true;
+        }
     }
 
     parseFileChanges(fileChanges) :any {
+        var splitRegex = /\s/
         var lines = fileChanges.split('\n');
         var segmentMetaDataRegex = /@@.+@@/;
         var metadata;
         var formattedLines = [];
         var type;
         for(var i = 0; i < lines.length; i++) {
-            if(lines[i].match(segmentMetaDataRegex)) {
+            var match = lines[i].match(segmentMetaDataRegex); 
+            if(match) {
+                var metadataLine = match[0]; 
                 metadata = this.getMetadata(lines[i]);
                 type = 'metadata';
+                formattedLines.push(this.formatLine(metadata, type, metadataLine));
+                // No new line to break next line from metadata
+                console.log(lines[i]);
+                console.log(metadataLine);
+                if(lines[i].length > metadataLine.length) {
+                    var unterminatedLine = lines[i].substring(metadataLine.length -1);
+                    type = 'line';
+                    formattedLines.push(this.formatLine(metadata, type, lines[i]));        
+                }
+
             } else {
                 type = 'line';
+                formattedLines.push(this.formatLine(metadata, type, lines[i]));
             }
 
-            formattedLines.push(this.formatLine(metadata, type, lines[i]));
         }
-        console.log(formattedLines);
         return formattedLines;
     }
 

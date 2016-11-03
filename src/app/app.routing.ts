@@ -2,6 +2,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
+import { SetupComponent } from './setup/setup.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -13,17 +14,17 @@ const appRoutes: Routes = [
         redirectTo: 'dashboard',
         canActivate: [AuthenticationGuard],
         pathMatch: 'full'
-    },
-    {
+    },{
         path: 'login',
         component: LoginComponent
-    },
-    {
+    },{
+        path: 'setup',
+        component: SetupComponent
+    },{
         path: 'dashboard',
         canActivate: [AuthenticationGuard],
         component: DashboardComponent
-    },
-    { path: '**', 
+    },{ path: '**', 
         redirectTo: 'dashboard',
         canActivate: [AuthenticationGuard],
         pathMatch: 'full'

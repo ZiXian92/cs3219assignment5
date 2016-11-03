@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'file-select',
   templateUrl: 'file-select.component.html'
 })
 
-export class FileSelectComponent implements OnInit {
+export class FileSelectComponent implements OnChanges {
   constructor() {}
 
   @Input() fileTree: any[];
@@ -18,8 +18,8 @@ export class FileSelectComponent implements OnInit {
   private currentFilePath = "/";
   private previousFilePaths = [];
 
-  ngOnInit() :void {
-    this.currentFileList = this.sortByType(this.fileTree);
+  ngOnChanges(changes) :void {
+    this.currentFileList = changes.fileTree.currentValue;
   }
 
   selectFile(file) :void {

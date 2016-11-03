@@ -1,5 +1,5 @@
 <div class="main row">
-	<div class="left-side col-xs-1">
+	<div class="left-side col-xs-1 pr-0 pl-0">
 		<h1>Git Guard</h1>
 	</div>
 
@@ -26,10 +26,10 @@
 		</form>
 
 
-		<div class="" *ngIf="!isEdit">
+		<div class="repoLink" *ngIf="!isEdit">
 			<span>Repository Link:</span>
 			<span *ngIf="!githubRepoLink">Unspecified</span> 
-			<h5 *ngIf="githubRepoLink" class="d-inline">{{githubRepoLink}}</h5>
+			<span *ngIf="githubRepoLink" class="d-inline">{{githubRepoLink}}</span>
 			<button 
 				class="btn btn-secondary"
 				(click)="editGithubRepoLink()">

@@ -49,12 +49,30 @@
 
 <template [ngIf]="showVisualization">
     <button class="btn btn-secondary" (click)="goToSetup()">Back to setup</button>
-    <div class="row">
-        <div class="col-xs-2">
-            Commit History for file
+    <div class="row visualization">
+        <div class="file-changes-list col-xs-3">
+            <div 
+                *ngFor="let fileChanges of fileChangesList"
+                [ngClass]="{'active': fileChanges === selectedFileChanges}"
+                (click)="selectFileChange(fileChanges)"
+                class="file-changes-data">
+                <div class="row">
+                    <md-icon>today</md-icon>
+                    {{fileChanges.date}}
+                </div>
+                <div class="row message">
+                    <md-icon>local_offer</md-icon>
+                    {{fileChanges.message}}
+                </div>
+                <div class="row">
+                    <md-icon>person</md-icon>
+                    <span>{{fileChanges.author}}</span>
+                    <span class="lines-edited">(+{{fileChanges.file.additions}}, -{{fileChanges.file.deletions}})</span>
+                </div>
+            </div>
         </div>
-        <div class="col-xs-10">
-            <file-changes [fileChanges]="patch"></file-changes>
+        <div class="col-xs-9">
+            <file-changes [fileChanges]="filePatch"></file-changes>
         </div>
     </div>
 </template>

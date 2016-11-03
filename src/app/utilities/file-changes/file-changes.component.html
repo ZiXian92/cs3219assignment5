@@ -1,17 +1,20 @@
 <div class="container-fluid main">
-    <div 
-        class="row"
-        *ngFor="let line of lines"
-        [ngClass]="{metadata: line.type==='metadata',
-                line: line.type==='line',
-                new: line.lineType==='new',
-                old: line.lineType==='old',
-                current: line.lineType==='current'}"
-        >
-            <span class="col-xs-1 index">{{line.oldIndex}}</span>
-            <span class="col-xs-1 index">{{line.newIndex}}</span>
-            <span class="col-xs-10 text">
-                <pre><code>{{line.line}}</code></pre>
-            </span>
-    </div>
+    <div *ngIf="showError">No changes detected!</div>
+    <template [ngIf]="!showError">
+        <div 
+            class="row"
+            *ngFor="let line of lines"
+            [ngClass]="{metadata: line.type==='metadata',
+                    line: line.type==='line',
+                    new: line.lineType==='new',
+                    old: line.lineType==='old',
+                    current: line.lineType==='current'}"
+            >
+                <span class="col-xs-1 index oldIndex">{{line.oldIndex}}</span>
+                <span class="col-xs-1 index newIndex">{{line.newIndex}}</span>
+                <span class="col-xs-10 text">
+                    <pre><code>{{line.line}}</code></pre>
+                </span>
+        </div>
+    </template>
 </div>

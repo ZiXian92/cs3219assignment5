@@ -6,16 +6,20 @@ export class UserService {
   private loggedIn = false;
 
   constructor(private http: Http) {
-    this.loggedIn = !!localStorage.getItem('access_token');
+    this.loggedIn = !!localStorage.getItem('token');
   }
 
   login(accessToken: string) {
-    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('token', accessToken);
     this.loggedIn = true;
   }
-  
+
+  getToken() {
+    return localStorage["token"];
+  }
+   
   logout() {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('token');
     this.loggedIn = false;
   }
 

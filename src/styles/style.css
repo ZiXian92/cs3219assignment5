@@ -1,20 +1,23 @@
 body {
-    font-size: 1.5vw;
+    font-size: 1vw !important;
 }
 
-login > .container-fluid {
+login > .container-fluid,
+setup > .container-fluid {
     background-image: url("../assets/background.jpg");
     background-size: cover;
 }
 
-login .login-main {
+login .login-main,
+setup .login-main { 
     position: relative;
     background-color: rgba(252,208,89,0.9);
     padding: 30px;
     border-radius: 15px;
 }
 
-login .inspecto-cat {
+login .inspecto-cat,
+setup .inspecto-cat { 
     position: absolute;
     top: -164px;
     right: -34px;
@@ -22,37 +25,44 @@ login .inspecto-cat {
     width: auto;
 }
 
-login .logo {
+login .logo,
+setup .logo {
     font-family: "Montserrat";
     font-size: 4em;
     padding-bottom: 20px;
 }
 
-login .sub-text {
+login .sub-text,
+setup .sub-text { 
     font-family: "Merriweather";   
 }
 
-login form {
+login form,
+setup form {
     padding: 0 !important;
 }
 
-login .githubRepoLinkCol {
+login .githubRepoLinkCol,
+setup .githubRepoLinkCol {
     padding: 0 !important;
 }
 
-login .btn-github {
+login .btn-github,
+setup .btn-github { 
     color: #FFFFFF;
     background-color: #7a3497 !important;
 }
 
-login .octocat-copyright {
+login .octocat-copyright,
+setup .octocat-copyright { 
     color: #FFFFFF;
     position: absolute;
     bottom: 10px;
     right: 10px;
 }
 
-login .octocat-copyright a{
+login .octocat-copyright a,
+setup .octocat-copyright a {
     color: #A2D7D8;
 }
 
@@ -66,15 +76,21 @@ dashboard .left-side {
 
 titlebar h1 {
     font-family: "Montserrat";
-    font-size: 1.3rem;
+    font-size: 1.2em;
     text-align: center;
-    margin-top: 0.5rem;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 titlebar .main {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     position: relative;
     z-index: 1;
+}
+
+titlebar .repoLink {
+    font-size: 0.8em;
 }
 
 sidebar {
@@ -128,7 +144,7 @@ file-select .main-container {
 
 file-select .file-list {
     padding: 0;
-    max-height: 200px;
+    max-height: 400px;
     overflow-y: auto;   
 }
 
@@ -169,15 +185,49 @@ file-select .link:hover:not(.selected) {
     background-color: rgb(235,236,237);
 }
 
+file-history .visualization {
+    padding-top: 15px;
+}
+
+file-history .file-changes-list {
+    padding-right: 0px;    
+}
+
+file-history .file-changes-data {
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1;
+    border-color: #DDDDDD;
+    margin: 0 0 5 0;
+}
+
+file-history .file-changes-data .row {
+    display: block;
+    padding: 3px 5px;
+    margin: 0;
+}
+
+file-history .file-changes-data .message {
+    max-height: 3em;
+    overflow: hidden
+}
+
+file-history .lines-edited {
+
+}
+
 file-changes .main {
     font-size: 1em;
     font-family: 'consolas';
     overflow-x: auto;
     border-radius: 5px;
+    border-style: solid;
+    border-width: 1;
+    border-color: #DDDDDD;
 }
 
 file-changes .index {
-    min-width: 40px;
+    min-width: 50px;
     text-align: right;
     padding: 0px 5px;
     -webkit-box-flex: 0;
@@ -185,15 +235,9 @@ file-changes .index {
     flex: 0;
 }
 
-file-changes :not(.metadata) > .index {
+file-changes .newIndex {
     border-style: solid;
-    border-width: 0 0 0 1;
-    border-color: #DDDDDD;
-}
-
-file-changes :not(.metadata) > .text {
-    border-style: solid;
-    border-width: 0 0 0 1;
+    border-width: 0 1 0 1;
     border-color: #DDDDDD;
 }
 
@@ -202,16 +246,10 @@ file-changes pre {
     margin: 0px;
 }
 
-file-changes .row {
-    border-style: solid;
-    border-width: 0 1 0 0;
-    border-color: #DDDDDD;   
-}
-
 file-changes .metadata {
     background-color: #D5FFFF;
     border-style: solid;
-    border-width: 1px;
+    border-width: 0 0 1 0;
     border-color: #DDDDDD;
 }
 

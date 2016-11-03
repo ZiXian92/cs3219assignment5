@@ -1,13 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+
+import { GithubService } from '../../services/github.service';
 
 @Component({
     selector: 'contributions',
     templateUrl: 'contributions.component.html'
 })
-export class ContributionsComponent{
+export class ContributionsComponent implements OnInit{
 	constructor(
+    	private githubService: GithubService
    	) {}
+
+	ngOnInit(): void {
+		var type = "contributors";
+		var params = {};
+		var apiString = this.githubService.buildApiString(type, params);
+		console.log(apiString);
+		
+		var type = "contributorsSummary";
+		var apiString = this.githubService.buildApiString(type, params);
+		console.log(apiString);
+		
+		var type = "weeklyContributions";
+		var myApiString = this.githubService.buildApiString(type, params);
+		console.log(apiString);
+		
+		var type = "fileListing";
+		var fileParams = {branch: "master"};
+		var myApiString = this.githubService.buildApiString(type, fileParams);
+		console.log(myApiString);
+		
+		var type = "detailedCommits";
+		var commitParams = {
+			branch: "branchName",
+			path: "pathName",
+			author: "authorName",
+			since: "sinceName",
+			until: "untilName"
+		};
+		var apiString = this.githubService.buildApiString(type, commitParams);
+		console.log(apiString);
+		
+		console.log('Calling Api with ' + myApiString);
+		this.githubService.callApi(myApiString)
+        .subscribe(function(response) {
+    	   	console.log(response);
+        });
+
+	}
 
 	// Bar chart
 	public barChartOptions:any = {
@@ -30,11 +71,10 @@ export class ContributionsComponent{
 
 	// events
 	public chartClicked(e:any):void {
-		console.log(e);
+		//console.log(e);
 	}
 
 	public chartHovered(e:any):void {
-		console.log(e);
+		//console.log(e);
 	}
-
 }
