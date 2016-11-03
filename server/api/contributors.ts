@@ -25,20 +25,31 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
   let repo: Repository = { owner: req.params.owner, name: req.params.repo };
   let redisKey: string = `/api/contributors/${repo.owner}/${repo.name}`;
   let ttl: number = 3600;
+  let user: string = req['user']? req['user'].user: null;
+  let reqObj: RepoRequest = { repo };
+  // if(user) reqObj.requestor = user;
+
+  // Get cached result. Fall back to API call if fails.
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
     conn.get(redisKey, (err: any, contributors: string) => {
-      if(err) reject(err);
-      else resolve(contributors);
+      if(err){ console.log('Unable to get cached result'); console.log(err); }
+      if(contributors) resolve({ contributors });
+      if(user) conn.get(user, (err: any, token: string): any => {
+        if(err){ console.log(`Unable to get access token for ${user}`); console.log(err); }
+        resolve({ contributors, token });
+      });
     })
-  )).then((contributors: string): any => {
-    if(contributors){
-      return res.json(JSON.parse(contributors));
-    }
-    return new PromisePipe(getContributors, extractContributorName).processData({ repo })
-    .then((contributors: string[]): Promise<any> =>
+  )).then(({contributors = null, token = null}): any => {
+    if(contributors){ return res.json(JSON.parse(contributors)); }
+    if(token) reqObj.requestor = token;
+    return new PromisePipe(getContributors, extractContributorName).processData(reqObj)
+    .then((contributors: string[]): void => {
+      // Asynchronously cache result. It's ok if it fails.
       connectToRedisAndDo((conn: RedisClient) => new Promise((resolve, reject): any =>
-        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())))
-      .then((): any => res.json(contributors)));
+        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())
+      )).catch(err => console.log(err));
+      res.json(contributors);
+    });
   }).catch((err: any): void => {
     console.log(err);
     res.sendStatus(500);
@@ -49,22 +60,20 @@ ContributorRouter.get('/:owner/:repo/summary', (req: Request, res: Response, nex
   let repo: Repository = { owner: req.params.owner, name: req.params.repo };
   let redisKey: string = `/api/contributors/${repo.owner}/${repo.name}/summary`;
   let ttl: number = 3600;
+  let user: string = req['user']? req['user'].user: null;
+  let reqObj: RepoRequest = { repo };
+  if(user) reqObj.requestor = user;
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-    conn.get(redisKey, (err: any, summary: string) => {
-      if(err) reject(err);
-      else resolve(summary);
-    })
+    conn.get(redisKey, (err: any, summary: string): any => err? reject(err): resolve(summary))
   )).then((summary: string): any => {
-    if(summary){
-      return res.json(JSON.parse(summary));
-    } else {
-      return new PromisePipe(getContributors, computeContributorTotal).processData({ repo })
-      .then((responseData: ContributorTotalStats[]): any =>
-        connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
-          conn.setex(redisKey, ttl, JSON.stringify(responseData), (err: any): any => err? reject(err): resolve()))
-        .then((): any => res.json(responseData))
-      ));
-    }
+    if(summary) return res.json(JSON.parse(summary));
+    return new PromisePipe(getContributors, computeContributorTotal).processData(reqObj)
+    .then((responseData: ContributorTotalStats[]): void => {
+      connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
+        conn.setex(redisKey, ttl, JSON.stringify(responseData), (err: any): any => err? reject(err): resolve())
+      )).catch(err => console.log(err));
+      res.json(responseData);
+    });
   }).catch((err: any): void => {
     console.log(err); res.sendStatus(500);
   });
@@ -77,16 +86,15 @@ ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next
   let user: string = req['user']? req['user'].user: null;
   let reqObj: RepoRequest = { repo };
   if(user) reqObj.requestor = user;
-  console.log(user);
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
     conn.get(redisKey, (err: any, val: string): any => err? reject(err): resolve(val))
   )).then((val: string): any => {
     if(val) return res.json(JSON.parse(val));
-    return new PromisePipe(getContributors, weeklyContributions).processData({ repo })
+    return new PromisePipe(getContributors, weeklyContributions).processData(reqObj)
     .then((contributors: any[]): void => {
       connectToRedisAndDo((conn:RedisClient): Promise<any> => new Promise((resolve, reject): any =>
         conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())
-      ));
+      )).catch(err => console.log(err));
       res.json(contributors);
     });
   }).catch((err: any): void => {
