@@ -22,42 +22,53 @@ export const CommitsRouter = Router();
 CommitsRouter.get('/:owner/:repo/changes', (req: Request, res: Response, next: NextFunction): void => {
   let redisKey: string = req.originalUrl;
   let ttl: number = 3600;
+  let requestor: string = req['user']? req['user'].user: undefined;
+
+  // Basic request info processing in case we need to perform the API call
+  let reqObj: RepoRequest = {
+    repo: { owner: req.params.owner, name: req.params.repo },
+    data: {
+      branch: req.query.branch,
+      path: req.query.path,
+      author: req.query.author,
+      since: req.query.since,
+      until: req.query.until
+    }
+  };
+  for(var k in reqObj.data) if(!reqObj.data[k]) delete reqObj.data[k];
+  if(!!reqObj.data.since) reqObj.data.since = moment(reqObj.data.since).format();
+  if(!!reqObj.data.until) reqObj.data.until = moment(reqObj.data.until).format();
+
+  // Fetch cached result and user's access token
+  // All redis erros are logged but does not result in reject because
+  // we can fall back to uncached, unauthenticated requests.
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-    conn.get(redisKey, (err: any, val: string): any => err? reject(err): resolve(val))
-  )).then((val: string): any => {
-    if(val){
-      return res.json(JSON.parse(val));
-    } else{
-      let requestor: string = req['user']? req['user']['name']: undefined;
-      return (requestor? connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-        conn.get(requestor, (err: any, token: string): any => err? reject(err): resolve(token))
-      )): Promise.resolve(requestor)).then((token: string): any => {
-        let reqObj: any = {
-          repo: { owner: req.params.owner, name: req.params.repo },
-          requestor: token,
-          data: {
-            branch: req.query.branch,
-            path: req.query.path,
-            author: req.query.author,
-            since: req.query.since,
-            until: req.query.until
-          }
-        };
-        if(!reqObj.token) delete reqObj.token;
-        for(var k in reqObj.data) if(!reqObj.data[k]) delete reqObj.data[k];
-        if(!!reqObj.data.since) reqObj.data.since = moment(reqObj.data.since).format();
-        if(!!reqObj.data.until) reqObj.data.until = moment(reqObj.data.until).format();
-        return new PromisePipe(getCommits, getCommitUrls, createResponseWrapper(reqObj), getCommitDetails, processCommitDetails)
-        .processData(<RepoRequest>reqObj)
-        .then((commits: any[]): any =>
-          connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-            conn.setex(redisKey, ttl, JSON.stringify(commits), (err: any): any => err? reject(err): resolve())
-          )).then((): any => res.json(commits))
-        );
+    conn.get(redisKey, (err: any, val: string): any => {
+      if(err){ console.log('Unable to retrieve cached result'); console.log(err); }
+      if(val) return resolve({ val });
+      if(requestor) conn.get(requestor, (err: any, token: string): any => {
+        if(err){ console.log('Unable to retrieve user access token'); console.log(err); }
+        resolve({ val, token });
+      });
+      else resolve({});
+    })
+  )).then(({val = null, token = null}): any => {
+    if(val) return res.json(JSON.parse(val));
+    else{
+      if(token) reqObj.requestor = token;
+      return new PromisePipe(getCommits, getCommitUrls, createResponseWrapper(reqObj), getCommitDetails, processCommitDetails)
+      .processData(reqObj)
+      .then((commits: any[]): void => {
+        // Cache results asynchronously. It's ok if fails.
+        connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
+          conn.setex(redisKey, ttl, JSON.stringify(commits), (err: any): any => err? reject(err): resolve())
+        )).then(() => console.log('Commit history cached'))
+        .catch((err: any): void => { console.log('Failed to cache commit history'); console.log(err); });
+        res.json(commits);
       });
     }
   }).catch((err: any): void => {
     console.log(err);
-    res.status(500);
+    res.sendStatus(500);
   });
 });
