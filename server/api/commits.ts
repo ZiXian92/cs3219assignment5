@@ -47,10 +47,10 @@ CommitsRouter.get('/:owner/:repo/changes', (req: Request, res: Response, next: N
       if(err){ console.log('Unable to retrieve cached result'); console.log(err); }
       if(val) return resolve({ val });
       if(requestor) conn.get(requestor, (err: any, token: string): any => {
-        if(err){ console.log('Unable to retrieve user access token'); console.log(err); }
+        if(err){ console.log(`Unable to retrieve access token for ${requestor}`); console.log(err); }
         resolve({ val, token });
       });
-      else resolve({});
+      else return resolve({});
     })
   )).then(({val = null, token = null}): any => {
     if(val) return res.json(JSON.parse(val));
