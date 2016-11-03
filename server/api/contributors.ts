@@ -32,12 +32,12 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
     conn.get(redisKey, (err: any, contributors: string) => {
       if(err){ console.log('Unable to get cached result'); console.log(err); }
-      if(contributors) resolve({ contributors });
+      if(contributors) return resolve({ contributors });
       if(user) conn.get(user, (err: any, token: string): any => {
         if(err){ console.log(`Unable to get access token for ${user}`); console.log(err); }
-        resolve({ contributors, token });
+        return resolve({ contributors, token });
       });
-      else resolve({});
+      else return resolve({});
     })
   )).then(({contributors = null, token = null}): any => {
     if(contributors){ return res.json(JSON.parse(contributors)); }
@@ -46,9 +46,9 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
     .then((contributors: string[]): void => {
       // Asynchronously cache result. It's ok if it fails.
       connectToRedisAndDo((conn: RedisClient) => new Promise((resolve, reject): any =>
-        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => {
+        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): void => {
           if(err){
-            console.log('Failed to cache contributors of ${repo.owner}/${repo.name}');
+            console.log(`Failed to cache contributors of ${repo.owner}/${repo.name}`);
             console.log(err);
           }
           resolve();
@@ -68,16 +68,28 @@ ContributorRouter.get('/:owner/:repo/summary', (req: Request, res: Response, nex
   let ttl: number = 3600;
   let user: string = req['user']? req['user'].user: null;
   let reqObj: RepoRequest = { repo };
-  if(user) reqObj.requestor = user;
+
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
-    conn.get(redisKey, (err: any, summary: string): any => err? reject(err): resolve(summary))
-  )).then((summary: string): any => {
+    conn.get(redisKey, (err: any, summary: string): any => {
+      if(err){ console.log(`Failed to get cached contribution summary for ${repo.owner}/${repo.name}`); console.log(err); }
+      if(summary) return resolve({ summary });
+      if(user) conn.get(user, (err: any, token: string): any => {
+        if(err){ console.log(`Failed to get access token for ${user}`); console.log(err); }
+        return resolve({ summary, token });
+      });
+      else return resolve({});
+    })
+  )).then(({ summary = null, token = null }): any => {
     if(summary) return res.json(JSON.parse(summary));
+    if(token) reqObj.requestor = token;
     return new PromisePipe(getContributors, computeContributorTotal).processData(reqObj)
     .then((responseData: ContributorTotalStats[]): void => {
       connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
-        conn.setex(redisKey, ttl, JSON.stringify(responseData), (err: any): any => err? reject(err): resolve())
-      )).catch(err => console.log(err));
+        conn.setex(redisKey, ttl, JSON.stringify(responseData), (err: any): any => {
+          if(err){ console.log(`Failed to cache contribution summary for ${repo.owner}/${repo.name}`); console.log(err); }
+          resolve();
+        })
+      ));
       res.json(responseData);
     });
   }).catch((err: any): void => {
@@ -91,16 +103,28 @@ ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next
   let ttl: number = 3600;
   let user: string = req['user']? req['user'].user: null;
   let reqObj: RepoRequest = { repo };
-  if(user) reqObj.requestor = user;
+
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
-    conn.get(redisKey, (err: any, val: string): any => err? reject(err): resolve(val))
-  )).then((val: string): any => {
+    conn.get(redisKey, (err: any, val: string): any => {
+      if(err){ console.log(`Failed to get cached weekly contributions for ${repo.owner}/${repo.name}`); console.log(err); }
+      if(val) return resolve({ val });
+      if(user) conn.get(user, (err: any, token: string): any => {
+        if(err){ console.log(`Failed to get access token for ${user}`); console.log(err); }
+        return resolve({ val, token });
+      });
+      else return resolve({});
+    })
+  )).then(({ val = null, token = null }): any => {
     if(val) return res.json(JSON.parse(val));
+    if(token) reqObj.requestor = token;
     return new PromisePipe(getContributors, weeklyContributions).processData(reqObj)
     .then((contributors: any[]): void => {
       connectToRedisAndDo((conn:RedisClient): Promise<any> => new Promise((resolve, reject): any =>
-        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())
-      )).catch(err => console.log(err));
+        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => {
+          if(err){ console.log(`Failed to cache weekly contributions for ${repo.owner}/${repo.name}`); console.log(err); }
+          resolve();
+        })
+      ));
       res.json(contributors);
     });
   }).catch((err: any): void => {
