@@ -50,6 +50,8 @@ export function get(url: string, headers?: RequestHeaders): Promise<any> {
 export function getJson(url: string, headers?: RequestHeaders): Promise<any> {
   headers = headers || {};
   headers['Accept'] = 'application/json';
+  console.log(`Request Headers for GET ${url}:`);
+  console.log(headers);
   return new Promise((resolve, reject) => fetch(url, {
     method: 'GET',
     headers,
@@ -88,6 +90,8 @@ export function post(url: string, body: any, headers?: RequestHeaders): Promise<
 export function postGetJson(url: string, body: any, headers?: RequestHeaders): Promise<any> {
   headers = headers || {};
   headers['Accept'] = 'application/json';
+  console.log(`Request headers for POST ${url}`);
+  console.log(headers);
   return new Promise((resolve, reject) =>
     fetch(url, {
       method: 'POST',
