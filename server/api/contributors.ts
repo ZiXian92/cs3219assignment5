@@ -27,7 +27,6 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
   let ttl: number = 3600;
   let user: string = req['user']? req['user'].user: null;
   let reqObj: RepoRequest = { repo };
-  // if(user) reqObj.requestor = user;
 
   // Get cached result. Fall back to API call if fails.
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject) =>
@@ -38,6 +37,7 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
         if(err){ console.log(`Unable to get access token for ${user}`); console.log(err); }
         resolve({ contributors, token });
       });
+      else resolve({});
     })
   )).then(({contributors = null, token = null}): any => {
     if(contributors){ return res.json(JSON.parse(contributors)); }
@@ -46,8 +46,14 @@ ContributorRouter.get('/:owner/:repo', (req: Request, res: Response, next: NextF
     .then((contributors: string[]): void => {
       // Asynchronously cache result. It's ok if it fails.
       connectToRedisAndDo((conn: RedisClient) => new Promise((resolve, reject): any =>
-        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => err? reject(err): resolve())
-      )).catch(err => console.log(err));
+        conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => {
+          if(err){
+            console.log('Failed to cache contributors of ${repo.owner}/${repo.name}');
+            console.log(err);
+          }
+          resolve();
+        })
+      ));
       res.json(contributors);
     });
   }).catch((err: any): void => {

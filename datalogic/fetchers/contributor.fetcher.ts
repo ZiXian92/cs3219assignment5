@@ -32,6 +32,7 @@ export function getContributors(reqData: RepoRequest): Promise<any> {
           resolve();
         })
       ));
+      // console.log(res.body);
       return res.body;
     })
   });
