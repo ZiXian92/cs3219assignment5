@@ -74,6 +74,10 @@ dashboard .left-side {
     background-color: #FFEA73;
 }
 
+titlebar .left-side {
+    padding: 15px 0px;
+}
+
 titlebar h1 {
     font-family: "Montserrat";
     font-size: 1.2em;
@@ -135,6 +139,11 @@ commit-history #toDate .input-group-addon {
 
 multi-select button {
     cursor: pointer;
+}
+
+multi-select .list-group {
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 file-select .main-container {

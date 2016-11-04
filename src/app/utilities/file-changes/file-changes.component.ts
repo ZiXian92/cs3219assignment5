@@ -38,12 +38,11 @@ export class FileChangesComponent implements OnChanges {
                 type = 'metadata';
                 formattedLines.push(this.formatLine(metadata, type, metadataLine));
                 // No new line to break next line from metadata
-                console.log(lines[i]);
-                console.log(metadataLine);
                 if(lines[i].length > metadataLine.length) {
-                    var unterminatedLine = lines[i].substring(metadataLine.length -1);
+                    var unterminatedLine = lines[i].substring(metadataLine.length);
+                    console.log(unterminatedLine);
                     type = 'line';
-                    formattedLines.push(this.formatLine(metadata, type, lines[i]));        
+                    formattedLines.push(this.formatLine(metadata, type, unterminatedLine));        
                 }
 
             } else {

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { GithubService } from '../../services/github.service';
 
 @Component({
     selector: 'commit-history',
     templateUrl: 'commit-history.component.html'
 })
 export class CommitHistoryComponent implements OnInit {
-	constructor() {}
-
+	constructor(
+    private githubService: GithubService
+  ) {}
+/*
  	private memberList: string[] = [
  		"Goku",
  		"Uzumaki Naruto",
@@ -21,13 +24,15 @@ export class CommitHistoryComponent implements OnInit {
  		"Gintoki Sakata",
  		"Gon Freecss",
  		"Tsuna Sawada" 	
- 	];
+ 	];*/
+
+  private memberList: string[];
 
   private showError: boolean = false;
   private showVisualization: boolean = false;
 
   private fromDateModel: any;
-  private toDateModel: any;
+  //private toDateModel: any;
 
   private selectedMemberList: string[] = [];
 
@@ -40,19 +45,34 @@ export class CommitHistoryComponent implements OnInit {
       day: currentDate.getDate()
     }
     this.fromDateModel = bootstrapCurrentDate;
-    this.toDateModel = bootstrapCurrentDate;
+    //this.toDateModel = bootstrapCurrentDate;
+    this.getUserList();
+  }
+
+  getUserList() {
+    var type = "contributors";
+    var apiString = this.githubService.buildApiString(type, {});
+    console.log("getting user list");
+    this.githubService.callApi(apiString)
+    .subscribe(function(response) {
+      this.memberList = response;
+    }.bind(this));
   }
 
   private visualizeCommitHistory(): void {
     console.log(this.fromDateModel);
-    console.log(this.toDateModel);
+    //console.log(this.toDateModel);
     console.log(this.selectedMemberList);
-    if(this.fromDateModel && this.toDateModel
-          && this.selectedMemberList.length > 0) {
+    if(this.fromDateModel && this.selectedMemberList.length > 0) {
+      this.getContributionsList(this.selectedMemberList);
       this.showVisualization = true;
     } else {
       this.showError = true;
     }
+  }
+
+  private getContributionsList(memberList) {
+    //Nothing yt
   }
 
   private goToSetup(): void {

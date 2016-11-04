@@ -8,7 +8,7 @@ export class GithubService implements OnInit {
 
   constructor(private http: Http, private userService: UserService) {}
 
-  private githubRepoLink: string = "https://github.com/kylelwm/autocompaste-html";
+  private githubRepoLink: string = "https://github.com/jquery/jquery";
   private githubOwner: string  = "kylelwm";
   private token: string;
 
