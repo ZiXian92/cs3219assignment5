@@ -23,3 +23,4 @@ APIRouter.use('/trees', FilesRouter);
 APIRouter.use('/commits', CommitsRouter);
 APIRouter.use('/me', MeRouter);
 APIRouter.use('/subscribe', SubscribeRouter);
+APIRouter.use('*', (req, res, next) => res.sendStatus(404));
