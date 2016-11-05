@@ -6,17 +6,21 @@
 
 'use strict';
 import * as Promise from 'bluebird';
+import * as moment from 'moment';
 import { RedisClient } from 'redis';
 import { Router, Request, Response, NextFunction } from 'express';
 import { Repository } from '../../dataentities/repository';
 import { RepoRequest } from '../../dataentities/repo.data.request';
 import { ContributorTotalStats } from '../../dataentities/contributor.total.stats';
+import { WeeklyContribution } from '../../dataentities/weekly.contribution';
 import { getContributors } from '../../datalogic/fetchers/contributor.fetcher';
 import { computeContributorTotal } from '../../datalogic/processors/contributor.total';
 import { extractContributorName } from '../../datalogic/processors/contributor.name';
 import { weeklyContributions } from '../../datalogic/processors/contributor.weekly';
+import { generateWeeklyContributionFilter, WeeklyContributionFilter } from '../../datalogic/processors/contributions.weekly.filter';
 import { PromisePipe } from '../../datalogic/promise.pipe';
 import { connectToRedisAndDo } from '../redis';
+import { createResponseWrapper } from '../../datalogic/processors/response.to.request';
 
 export const ContributorRouter = Router();
 
@@ -99,10 +103,16 @@ ContributorRouter.get('/:owner/:repo/summary', (req: Request, res: Response, nex
 
 ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next: NextFunction): void => {
   let repo: Repository = { owner: req.params.owner, name: req.params.repo };
-  let redisKey: string = `/api/contributors/${repo.owner}/${repo.name}/weekly`;
+  let author: string = req.query.author;
+  let since = moment(req.query.since);
+  let until = moment(req.query.until);
+  let redisKey: string = req.originalUrl;
   let ttl: number = 3600;
   let user: string = req['user']? req['user'].user: null;
   let reqObj: RepoRequest = { repo };
+  let weeklyFilter: WeeklyContributionFilter = generateWeeklyContributionFilter({
+    author, since: since.isValid()? since: null, until: until.isValid()? until: null
+  });
 
   connectToRedisAndDo((conn: RedisClient): Promise<any> => new Promise((resolve, reject): any =>
     conn.get(redisKey, (err: any, val: string): any => {
@@ -117,8 +127,8 @@ ContributorRouter.get('/:owner/:repo/weekly', (req: Request, res: Response, next
   )).then(({ val = null, token = null }): any => {
     if(val) return res.json(JSON.parse(val));
     if(token) reqObj.requestor = token;
-    return new PromisePipe(getContributors, weeklyContributions).processData(reqObj)
-    .then((contributors: any[]): void => {
+    return new PromisePipe(getContributors, weeklyContributions, weeklyFilter).processData(reqObj)
+    .then((contributors: WeeklyContribution[]): void => {
       connectToRedisAndDo((conn:RedisClient): Promise<any> => new Promise((resolve, reject): any =>
         conn.setex(redisKey, ttl, JSON.stringify(contributors), (err: any): any => {
           if(err){ console.log(`Failed to cache weekly contributions for ${repo.owner}/${repo.name}`); console.log(err); }
