@@ -1,12 +1,12 @@
-<div class="col-xs-6">
-	<div class="row">
+<div class="col-xs-12">
+	<div class="row pb-1">
 		<div class="btn-group mx-auto" data-toggle="buttons">
 			<button 
 				[ngClass]="{
 					'btn-outline-secondary': !showData[0],
 					'btn-secondary': showData[0]
 				}"
-				class="btn" 
+				class="btn px-1" 
 				(click)="toggleData(0)">Commits
 			</button>
 			<button 
@@ -14,7 +14,7 @@
 					'btn-outline-secondary': !showData[1],
 					'btn-secondary': showData[1]
 				}"
-				class="btn" 
+				class="btn px-1" 
 				(click)="toggleData(1)">Additions
 			</button>
 			<button 
@@ -22,42 +22,30 @@
 					'btn-outline-secondary': !showData[2],
 					'btn-secondary': showData[2]
 				}"
-				class="btn" 
+				class="btn px-1" 
 				(click)="toggleData(2)">Deletions
 			</button>
 		</div>
 	</div>
 
-	<div *ngFor="let barChart of displayBarCharts" style="display: block">
-		<canvas baseChart
-			[datasets]="barChart.barChartData"
-			[labels]="barChart.barChartLabels"
-			[options]="barChart.barChartOptions"
-			[legend]="barChart.barChartLegend"
-			[chartType]="barChart.barChartType">	
-		</canvas>
+	<div class="row pb-1">
+		<div class="col-xs-10 mx-auto" *ngFor="let barChart of displayBarCharts" style="display: block">
+			<canvas baseChart
+				[datasets]="barChart.barChartData"
+				[labels]="barChart.barChartLabels"
+				[options]="barChart.barChartOptions"
+				[legend]="barChart.barChartLegend"
+				[chartType]="barChart.barChartType">	
+			</canvas>
+		</div>
 	</div>
-
 	<div class="row">
 		<div class="mx-auto">
-			<button class="btn btn-secondary" (click)="previousChart()"><md-icon>keyboard_arrow_left</md-icon>
+			<button class="btn btn-secondary px-1" (click)="previousChart()"><md-icon>keyboard_arrow_left</md-icon>
 			</button>
 			<span>Showing {{peopleRange.start}} to {{peopleRange.end}}</span>
-			<button class="btn btn-secondary" (click)="nextChart()"><md-icon>keyboard_arrow_right</md-icon>
+			<button class="btn btn-secondary px-1" (click)="nextChart()"><md-icon>keyboard_arrow_right</md-icon>
 			</button>
 		</div>
 	</div>
 </div>
-
-<div class="col-xs-6">
-	Pie chart
-
-	<div style="display: block">
-		<canvas baseChart
-			[data]="pieChartData"
-			[labels]="pieChartLabels"
-			[chartType]="pieChartType">	
-		</canvas>
-	</div>
-
-</div>	

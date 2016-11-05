@@ -8,9 +8,10 @@ export class GithubService implements OnInit {
 
   constructor(private http: Http, private userService: UserService) {}
 
-  private githubRepoLink: string = "https://github.com/jquery/jquery";
+  private githubRepoLink: string = "https://github.com/tungnk1993/scrapy";
   private githubOwner: string  = "kylelwm";
   private token: string;
+  private finalData;
 
   private SERVER_API = {
     serverUrl: "http://localhost:7777/api",
@@ -18,7 +19,9 @@ export class GithubService implements OnInit {
     contributorsSummary: "/contributors/{{owner}}/{{repo}}/summary",
     weeklyContributions: "/contributors/{{owner}}/{{repo}}/weekly",
     fileListing: "/trees/{{owner}}/{{repo}}",
-    detailedCommits: "/commits/{{owner}}/{{repo}}/changes"
+    detailedCommits: "/commits/{{owner}}/{{repo}}/changes",
+    subscribe: "/subscribe",
+    final: "/final/{{owner}}/{{repo}}"
   }
 
   private GITHUB_API = {
@@ -29,6 +32,8 @@ export class GithubService implements OnInit {
   // Expose an observable for our githubRepoLink using Rxjs' BehaviorSubject
   private githubRepoLinkSource = new Subject<string>();
   githubRepoLink$ = this.githubRepoLinkSource.asObservable();
+  private finalDataSource = new Subject<any>();
+  finalData$ = this.finalDataSource.asObservable();
 
   ngOnInit(): void {
     this.updateGithubRepoLink(this.githubRepoLink);
@@ -42,6 +47,23 @@ export class GithubService implements OnInit {
   setGithubRepoLink(githubRepoLink: string): void {
     this.githubRepoLink = githubRepoLink;
     this.updateGithubRepoLink(githubRepoLink);
+  }
+
+  getFinalData(): void {
+    return this.finalData;
+  }
+
+  updateFinalData(): void {
+    this.finalData = null;
+    var type = "final";
+    var apiString = this.buildApiString(type, {});
+    this.get(apiString)
+    .subscribe(function(response) {
+      if(response) {
+        this.finalData = response;
+        this.finalDataSource.next(response);
+      }
+    }.bind(this));
   }
 
   getGithubRepoLink(): string {
@@ -126,10 +148,31 @@ export class GithubService implements OnInit {
 
     apiString = this.insertOwnerAndRepo(apiString);
 
+    if(!apiString) {
+      return null;
+    }
+
     switch(type) {
       case 'contributors':
       case 'contributorsSummary':
+      case 'subscribe':
+      case 'final':
+        break;
       case 'weeklyContributions':
+        if(!params.author || !params.since || !params.until) {
+          return null;
+        } else {
+          urlParamNames.push("author");
+          urlParamValues.push(params.author);
+
+          urlParamNames.push("since");
+          urlParamValues.push(params.since);
+
+          urlParamNames.push("until");
+          urlParamValues.push(params.until);
+
+          apiString = this.insertParam(apiString, urlParamNames, urlParamValues);
+        }
         break;
       case 'fileListing':
         if(!params.branch) {
@@ -174,19 +217,49 @@ export class GithubService implements OnInit {
     return apiString;
   }
 
-  callApi(apiString: string): Observable<any> {
+  get(apiString: string): Observable<any> {
 
-    let options = null;
-    let token = this.userService.getToken();
-    if(token) {
-      let headers = new Headers({ 'token': token });
-      options = new RequestOptions({ headers: headers });
-    }
+    let options = new RequestOptions();
+    this.setToken(options);
 
     return this.http.get(apiString, options)
     .map(function(response) {
-      return response.json() || { };
+      var result;
+      try {
+        result = response.json() || { };
+      } catch (e) {
+        result = response;
+      }
+      return result;
     });
+  }
+
+  post(apiString: string, body: any): Observable<any> {
+
+    let options = new RequestOptions();
+    this.setToken(options);
+
+    return this.http.post(apiString, body, options)
+    .map(function(response) {
+      var result;
+      try {
+        result = response.json();
+      } catch (e) {
+        result = {};
+      }
+      return result;
+    });
+  }
+
+  setToken(options): any {
+    let token = this.userService.getToken();
+    if(token) {
+      if(!options.header) {
+        let headers = new Headers();
+        options.headers = headers;
+      }
+      options.headers.set('token', token);
+    }
   }
 
 }

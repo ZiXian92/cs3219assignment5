@@ -1,6 +1,14 @@
 <div *ngIf="!showVisualization">
+  <div *ngIf="showError" class="alert alert-danger" role="alert">
+    {{errorMessage}}
+  </div>
+  <div class="row">
+      <div class="col-xs-12 pb-1">
+          <h5>View how much work your fellow contributors put in</h5>
+      </div>
+  </div>
   <form class="form-inline">
-    <div class="form-group pr-50">
+    <div class="form-group">
       <label for="fromDate"><h5>From</h5></label>
       <div id="fromDate" class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd" name="fromDatePicker" [(ngModel)]="fromDateModel" ngbDatepicker #fromDatePicker="ngbDatepicker" required>
@@ -10,7 +18,7 @@
       </div>
     </div>
     
-    <!--<div class="form-group">
+    <div class="form-group pl-2">
       <label for="toDate"><h5>To</h5></label>
       <div id="toDate" class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd" name="toDatePicker" [(ngModel)]="toDateModel" ngbDatepicker #toDatePicker="ngbDatepicker" required>
@@ -18,36 +26,32 @@
           <md-icon>date_range</md-icon>
         </div>
       </div>
-    </div>-->
+    </div>
   </form>
 
   <div class="row">
-    <div 
-      class="col-xs-3">
+    <div class="col-xs-6">
       <h5>Select member(s)</h5>
+      
       <multi-select [itemList]="memberList" [(selectedItemList)]="selectedMemberList" #ms></multi-select>
+      
+      <button type="submit" class="btn btn-outline-success btn-block my-1" (click)="visualizeCommitHistory()">Visualize</button>
     </div>
   </div>
-
-  <button type="submit" class="btn btn-outline-success" (click)="visualizeCommitHistory()">Visualize</button>
-  <span *ngIf="showError">
-    Please finish the setup first!
-  </span>
 </div>
 
 <div *ngIf="showVisualization">
   <button class="btn btn-secondary" (click)="goToSetup()">Back to setup</button>
 
-  <div class="row">
+  <div *ngIf="lineChart" class="row">
     <div class="col-xs-6">
       <div style="display: block;">
         <canvas baseChart width="400" height="400"
-          [datasets]="lineChartData"
-          [labels]="lineChartLabels"
-          [options]="lineChartOptions"
-          [colors]="lineChartColors"
-          [legend]="lineChartLegend"
-          [chartType]="lineChartType">            
+          [datasets]="lineChart.lineChartData"
+          [labels]="lineChart.lineChartLabels"
+          [options]="lineChart.lineChartOptions"
+          [legend]="lineChart.lineChartLegend"
+          [chartType]="lineChart.lineChartType">            
         </canvas>
       </div>
     </div>

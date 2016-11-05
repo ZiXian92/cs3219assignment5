@@ -15,8 +15,8 @@ export class ContributionsComponent implements OnInit{
 	private barCharts;
 	private displayBarCharts;
 	private totalContributorsCount;
-	private onScreenChart = 2;
-	private peopleOnChart = 4;
+	private onScreenChart = 1;
+	private peopleOnChart = 8;
 	private peopleRange = {
 		start: null,
 		end: null
@@ -29,7 +29,7 @@ export class ContributionsComponent implements OnInit{
 		var type = "contributorsSummary";
 		var params = {};
 		var apiString = this.githubService.buildApiString(type, params);
-		this.githubService.callApi(apiString)
+		this.githubService.get(apiString)
         .subscribe(function(response) {
         	this.totalContributorsCount = response.length;
     	   	this.barCharts = this.createBarChartData(response);
@@ -190,9 +190,4 @@ export class ContributionsComponent implements OnInit{
 		{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
 		{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series C'}
 	];
-
-	// Pie chart
-	public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
-	public pieChartData:number[] = [300, 500, 100];
-	public pieChartType:string = 'pie';
 }

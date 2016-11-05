@@ -1,27 +1,37 @@
 <template [ngIf]="!showVisualization">
+
+    <div *ngIf="showError" class="row">
+        <div class="col-xs-6 ">
+            <div class="alert alert-danger" role="alert">
+                Please finish the setup first!
+            </div>
+        </div>
+    </div>   
+
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-6">
             <h5>Select a file</h5>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 mb-1">
             <file-select [fileTree]="fileTree" [(fileSelect)]="fileSelect"></file-select>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
             <button
-                class="btn btn-outline-primary " 
-                [class.active]="lineSelect.option"
+                class="btn btn-outline-primary btn-block mb-1" 
                 (click)="lineSelect.option = !lineSelect.option">
-                Specify lines
+                Specify lines 
+                <span *ngIf="lineSelect.option">&#x25B2;</span>
+                <span *ngIf="!lineSelect.option">&#x25BC;</span>
             </button>
         </div>
     </div>
     <div class="row" *ngIf="lineSelect.option">
         <div class="col-xs-12">
-            <form class="form-inline">
+            <form class="form-inline card card-block">
                 <div class="form-group">
                     <label for="fromLine">From line</label>
                     <input type="number" class="form-control" name="fromLine" [(ngModel)]="lineSelect.fromLine" placeholder="0">
@@ -36,13 +46,10 @@
     <div class="row">
         <div class="col-xs-12">
             <button
-                class="btn btn-outline-success" 
+                class="btn btn-outline-success btn-block mb-1" 
                 (click)="showFileHistory()">
                 Visualize
-            </button>  
-            <span *ngIf="showError">
-                Please finish the setup first!
-            </span>
+            </button>
         </div>
     </div>
 </template>
@@ -50,28 +57,36 @@
 <template [ngIf]="showVisualization">
     <button class="btn btn-secondary" (click)="goToSetup()">Back to setup</button>
     <div class="row visualization">
-        <div class="file-changes-list col-xs-3">
+        <div class="file-changes-list col-xs-4">
             <div 
                 *ngFor="let fileChanges of fileChangesList"
-                [ngClass]="{'active': fileChanges === selectedFileChanges}"
+                [ngClass]="{
+                    'card-outline-success': fileChanges === selectedFileChanges,
+                    'card-outline-secondary': fileChanges !== selectedFileChanges
+                }"
                 (click)="selectFileChange(fileChanges)"
-                class="file-changes-data">
-                <div class="row">
-                    <md-icon>today</md-icon>
+                class="card file-changes-metadata">
+
+                <div class="card-header">
                     {{fileChanges.date}}
+                    <md-icon 
+                        *ngIf="fileChanges === selectedFileChanges"
+                        class="float-xs-right">done</md-icon>
                 </div>
-                <div class="row message">
-                    <md-icon>local_offer</md-icon>
-                    {{fileChanges.message}}
-                </div>
-                <div class="row">
-                    <md-icon>person</md-icon>
-                    <span>{{fileChanges.author}}</span>
-                    <span class="lines-edited">(+{{fileChanges.file.additions}}, -{{fileChanges.file.deletions}})</span>
+                <div class="card-block">
+                    <div class="card-title">
+                        <b>
+                            {{fileChanges.author}}, +{{fileChanges.file.additions}} additions, -{{fileChanges.file.deletions}} deletions
+                        </b>
+                    </div>
+
+                    <div class="card-text">
+                        {{fileChanges.message}}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xs-9">
+        <div class="col-xs-8">
             <file-changes [fileChanges]="filePatch"></file-changes>
         </div>
     </div>

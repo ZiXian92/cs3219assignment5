@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { ContributionsComponent } from './contributions/contributions.component';
 import { CommitHistoryComponent } from './commit-history/commit-history.component';
 import { FileHistoryComponent } from './file-history/file-history.component';
+import { FinalComponent } from './final/final.component';
 import { SubscribeComponent } from './subscribe/subscribe.component';
 
 
@@ -24,6 +25,9 @@ const dashboardRoutes: Routes = [
         }, {
             path: 'file-history',
             component: FileHistoryComponent
+        }, {
+            path: 'final',
+            component: FinalComponent
         }, {
             path: 'subscribe',
             component: SubscribeComponent

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { GithubService } from '../services/github.service';
@@ -9,7 +9,7 @@ import { State } from '../class/state';
     selector: 'dashboard',
     templateUrl: 'dashboard.component.html'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
 	constructor(
     	private userService: UserService,
     	private githubService: GithubService,
@@ -17,11 +17,16 @@ export class DashboardComponent {
    	) {
 		githubService.githubRepoLink$.subscribe(
 			(githubRepoLink: string) => {
-				console.log("You update GithubRepoLink?!");
-				router.navigate(['dashboard']);
+                this.githubService.updateFinalData();
+				router.navigate(['']);
 			}
-		)
+		);
+        Chart.defaults.global.scaleFontSize = 16;
    	}
+
+    ngOnInit() {
+        this.githubService.updateFinalData();
+    }
 
    	// List of states to pass into sidebar
     private stateList:[State] = [{
@@ -36,6 +41,10 @@ export class DashboardComponent {
         route: "file-history",
         name: "File History",
         icon: "insert_drive_file"
+    }, {
+        route: "final",
+        name: "Final",
+        icon: "pie_chart"
     }, {
         route: "subscribe",
         name: "Subscribe",

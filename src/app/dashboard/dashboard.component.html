@@ -1,10 +1,15 @@
 <div class="container-fluid">
-	<titlebar></titlebar>
-
-	<div class="row">
-		<sidebar class="left-side col-xs-1" [stateList]="stateList"></sidebar>
-		<div class="content col-xs-11">
-			<router-outlet></router-outlet>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-xs-1 px-0 sidebar left-side">
+            <sidebar [stateList]="stateList"></sidebar>
+        </div>
+        <div class="col-xs-11 px-0">
+            <div class="px-1 py-1 titlebar">
+                <titlebar></titlebar>
+            </div>
+            <div class="container-fluid px-2 py-2">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
 </div>

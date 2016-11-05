@@ -1,20 +1,25 @@
-<ul class="nav nav-pills nav-stacked h-100">
-	<li *ngFor="let state of stateList" class="nav-item">
-		<div 
-			class="nav-link"
-			[routerLink]="[state.route]"
-			[routerLinkActive]="['active']">
-			<md-icon class="d-block">{{state.icon}}</md-icon>
-            <p>{{state.name}}</p>
-		</div>
-	</li>
+<div class="h-100">
+    <div class="logo py-2">
+        <h5 class="text-xs-center">Git Guard</h5>
+    </div>
+    <ul class="nav nav-pills nav-stacked">
+        <li *ngFor="let state of stateList" class="nav-item">
+            <div 
+                class="nav-link"
+                [routerLink]="[state.route]"
+                [routerLinkActive]="['active']">
+                <md-icon class="d-block">{{state.icon}}</md-icon>
+                <p>{{state.name}}</p>
+            </div>
+        </li>
 
-    <li class="nav-item" (click)="logout()">
-        <div 
-            class="nav-link">
-            <md-icon class="d-block">arrow_back</md-icon>
-            <p>Logout</p>
-        </div>
-    </li>
-</ul>
+        <li class="nav-item" (click)="logout()">
+            <div 
+                class="nav-link">
+                <md-icon class="d-block">arrow_back</md-icon>
+                <p>Logout</p>
+            </div>
+        </li>
+    </ul>
 
+</div>

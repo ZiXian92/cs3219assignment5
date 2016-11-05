@@ -10,8 +10,11 @@
 import { createClient, RedisClient } from 'redis';
 import * as Promise from 'bluebird';
 
-const HOST = 'redis';
+// const HOST = 'redis';
+const HOST = 'localhost';
 const PORT = 6379;
+
+//const useCache: boolean = true;
 const useCache: boolean = true;
 
 // var redisClient: RedisClient = createClient(PORT, HOST);
