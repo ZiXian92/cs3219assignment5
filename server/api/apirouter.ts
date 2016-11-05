@@ -13,6 +13,7 @@ import { FilesRouter } from './files';
 import { CommitsRouter } from './commits';
 import { MeRouter } from './me';
 import { SubscribeRouter } from './subscribe';
+import { FinalRouter } from './final';
 
 export const APIRouter: Router = Router();
 
@@ -23,4 +24,5 @@ APIRouter.use('/trees', FilesRouter);
 APIRouter.use('/commits', CommitsRouter);
 APIRouter.use('/me', MeRouter);
 APIRouter.use('/subscribe', SubscribeRouter);
+APIRouter.use('/final', FinalRouter);
 APIRouter.use('*', (req, res, next) => res.sendStatus(404));
