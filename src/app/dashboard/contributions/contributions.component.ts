@@ -14,11 +14,13 @@ export class ContributionsComponent implements OnInit{
     	private githubService: GithubService
    	) {}
 
+	private openDropdown = false;
 	private barCharts;
 	private displayBarCharts;
-	private totalContributorsCount;
+	private sortSelect;
 	private onScreenChart = 1;
 	private peopleOnChart = 8;
+	private response;
 	private peopleRange = {
 		start: null,
 		end: null
@@ -33,19 +35,57 @@ export class ContributionsComponent implements OnInit{
 		var apiString = this.githubService.buildApiString(type, params);
 		this.githubService.get(apiString)
         .subscribe(function(response) {
-        	this.totalContributorsCount = response.length;
-    	   	this.barCharts = this.createBarChartData(response);
-    	   	var defaultCharts = [];
-    	   	for(var i = 0; i < this.barCharts.length && i < this.onScreenChart; i++) {
-    	   		defaultCharts.push(this.barCharts[i]);
-    	   	}
-    	   	this.currentChartIndex = 0;
-    	   	this.peopleRange = {
-    	   		start: 1,
-    	   		end: defaultCharts.length * this.peopleOnChart
-    	   	}
-    	   	this.updateCharts(defaultCharts);
+        	this.response = response;
+        	var sortedContributors = this.sortContributors(response, 'commits');
+        	this.initializeVisualization(sortedContributors);
         }.bind(this));
+	}
+
+	public sortContributors(data, type) {
+		var sortBy;
+		var sortedData = data;
+		switch(type) {
+			case 'commits':
+				sortBy = type;
+				this.sortSelect = "Commits";
+				break;
+			case 'additions':
+				sortBy = type;
+				this.sortSelect = "Additions";
+				break;
+			case 'deletions':
+				sortBy = type;
+				this.sortSelect = "Deletions";
+				break;
+		}
+
+		if(sortBy) {
+			sortedData = _.orderBy(data, sortBy, 'desc');
+		}
+		return sortedData;
+	}
+
+	public initializeVisualization(data) {
+	   	this.barCharts = this.createBarChartData(data);
+	   	var defaultCharts = [];
+	   	for(var i = 0; i < this.barCharts.length && i < this.onScreenChart; i++) {
+	   		defaultCharts.push(this.barCharts[i]);
+	   	}
+	   	this.currentChartIndex = 0;
+	   	this.peopleRange = {
+	   		start: 1,
+	   		end: defaultCharts.length * this.peopleOnChart
+	   	}
+	   	this.updateCharts(defaultCharts);
+	}
+
+	public changeSorting(type) {
+		if(this.sortSelect != type) {
+			var sortedContributors = this.sortContributors(this.response, type);
+        	this.initializeVisualization(sortedContributors);
+			this.sortSelect = type;
+		}
+		this.openDropdown = false;
 	}
 
 	public updateCharts(charts) {
@@ -103,12 +143,12 @@ export class ContributionsComponent implements OnInit{
 					this.barCharts);
 		if(nextTwoCharts.length > 0) {
 			this.currentChartIndex += this.onScreenChart;
-			this.updateCharts(nextTwoCharts);
 			this.peopleRange = {
 				start: this.currentChartIndex * this.peopleOnChart + 1,
 				end: (this.currentChartIndex + nextTwoCharts.length) * this.peopleOnChart
 			}
-			this.showData = [true, true, true];
+			nextTwoCharts = this.filterData(nextTwoCharts);
+			this.updateCharts(nextTwoCharts);
 		}
 	}
 
@@ -118,13 +158,22 @@ export class ContributionsComponent implements OnInit{
 					this.barCharts);
 		if(previousTwoCharts.length > 0) {
 			this.currentChartIndex -= this.onScreenChart;
-			this.updateCharts(previousTwoCharts);
 			this.peopleRange = {
 				start: this.currentChartIndex * this.peopleOnChart + 1,
 				end: (this.currentChartIndex + previousTwoCharts.length) * this.peopleOnChart
 			}
-			this.showData = [true, true, true];
+			previousTwoCharts = this.filterData(previousTwoCharts);
+			this.updateCharts(previousTwoCharts);
 		}
+	}
+
+	public filterData(charts) {
+		for(var i = 0; i < this.showData.length; i++) {
+			if(!this.showData[i]) {
+				charts = this.removeSeries(i, charts);
+			}
+		}
+		return charts;
 	}
 
 	public toggleData(index) {
@@ -148,6 +197,10 @@ export class ContributionsComponent implements OnInit{
 	public removeSeries(index, displayBarCharts) {
 		
 		var removeLabel;
+
+		var clone = JSON.parse(JSON.stringify(displayBarCharts));
+		displayBarCharts = clone;
+
 		switch(index) {
 			case 0:
 				removeLabel = "Commits";
