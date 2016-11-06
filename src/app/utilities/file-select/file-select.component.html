@@ -14,7 +14,7 @@
             </div>
 
             <div *ngFor="let file of currentFileList" 
-                class="row link flex-items-xs-middle py-1"
+                class="row link flex-items-xs-middle"
                 (click)="selectFile(file)"
                 [ngClass]="{'selected': fileSelect.file === file}">
                 <div
