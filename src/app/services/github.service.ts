@@ -72,7 +72,7 @@ export class GithubService implements OnInit {
 
   updateGithubRepoLink(githubRepoLink: string): void {
     if(githubRepoLink) {
-      this.githubRepoLinkSource.next(githubRepoLink);  
+      this.githubRepoLinkSource.next(githubRepoLink);
     }
   }
 
@@ -97,7 +97,7 @@ export class GithubService implements OnInit {
       var intermediateString = githubRepoLink.substring(prefix.length);
       if(intermediateString.indexOf(endingSlash) >= 0) {
         var ownerNameLength = intermediateString.indexOf(endingSlash);
-        intermediateString = intermediateString.substring(ownerNameLength); 
+        intermediateString = intermediateString.substring(ownerNameLength);
         if(intermediateString.indexOf(endingSlash) >= 0) {
           var repoNameStart = intermediateString.indexOf(endingSlash) + 1;
           var repoName = intermediateString.substring(repoNameStart);
@@ -115,7 +115,7 @@ export class GithubService implements OnInit {
 
     let owner = this.getOwnerOfRepo(this.githubRepoLink);
     let repo = this.getRepoName(this.githubRepoLink);
-    
+
     if(!owner || !repo) {
       return null;
     } else {
@@ -138,9 +138,9 @@ export class GithubService implements OnInit {
 
   buildApiString(type: string, params: any): string {
 
-    var apiString = this.SERVER_API[type]; 
+    var apiString = this.SERVER_API[type];
     var urlParamNames = [];
-    var urlParamValues = []; 
+    var urlParamValues = [];
 
     if(!apiString) {
       return null;
@@ -258,7 +258,7 @@ export class GithubService implements OnInit {
         let headers = new Headers();
         options.headers = headers;
       }
-      options.headers.set('token', token);
+      options.headers.set('Authorization', `token ${token}`);
     }
   }
 
