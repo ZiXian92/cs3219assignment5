@@ -77,6 +77,7 @@ export class ContributionsComponent implements OnInit{
 	   		end: defaultCharts.length * this.peopleOnChart
 	   	}
 	   	this.updateCharts(defaultCharts);
+	   	this.showData = [true, true, true];
 	}
 
 	public changeSorting(type) {
@@ -230,8 +231,6 @@ export class ContributionsComponent implements OnInit{
 
 	public addSeries(index, displayBarCharts) {
 		for(var i = 0; i < displayBarCharts.length; i++) {
-			console.log(this.barCharts[displayBarCharts[i].index]);
-			
 			displayBarCharts[i].barChartData
 					.push(this.barCharts[displayBarCharts[i].index].barChartData[index]);
 			displayBarCharts[i].barChartData = 
