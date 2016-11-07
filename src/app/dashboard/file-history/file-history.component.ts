@@ -21,7 +21,6 @@ export class FileHistoryComponent implements OnInit {
   private showError;
 
   ngOnInit() :void {
-
     this.getFileTree();
     this.selectedFileChanges = null;
     this.fileChangesList = null;
@@ -42,10 +41,12 @@ export class FileHistoryComponent implements OnInit {
     var type = "fileListing";
     var fileParams = {branch: "master"};
     var apiString = this.githubService.buildApiString(type, fileParams);
-    this.githubService.callApi(apiString)
+    this.githubService.get(apiString)
     .subscribe(function(response) {
-      this.fileTree = this.parseFileListData(response);
-      this.fileTree = this.sortByType(this.fileTree);
+      if(response.tree) {
+        this.fileTree = this.parseFileListData(response);
+        this.fileTree = this.sortByType(this.fileTree);
+      }
     }.bind(this));
   }
 
@@ -61,7 +62,7 @@ export class FileHistoryComponent implements OnInit {
     };
     var apiString = this.githubService.buildApiString(type, commitParams);
     console.log(apiString);
-    this.githubService.callApi(apiString)
+    this.githubService.get(apiString)
     .subscribe(function(response) {
       this.fileChangesList = this.processFileChanges(response, file.fullName, this.lineSelect);
       this.displayFileChanges(this.fileChangesList, file.fullName);
@@ -180,7 +181,6 @@ export class FileHistoryComponent implements OnInit {
 
   // Req: fileListData must be sorted alphabetically by path
   parseFileListData(fileListData) {
-    console.log(fileListData);
       var fileList = fileListData.tree;
       var fileTree = [];
       var mostRecentFolderPath = "";

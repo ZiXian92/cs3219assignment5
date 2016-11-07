@@ -1,11 +1,16 @@
-<div 
-    class="list-group">
-  <button 
-    *ngFor="let select of selectList"
-    type="button"
-    class="list-group-item list-group-item-action"
-    [ngClass]="{'active': select.selected}"
-    (click)="selectItem(select)">
-    {{select.name}}
-  </button>
+<input 
+    type="text" 
+    class="form-control" 
+    placeholder="Filter by name"
+    [(ngModel)]="filterKey" 
+    (ngModelChange)="filter(filterKey)">
+<div class="list-group card">
+    <button 
+        *ngFor="let select of displaySelectList"
+        type="button"
+        class="list-group-item list-group-item-action"
+        [ngClass]="{'active': select.selected}"
+        (click)="selectItem(select)">
+        {{select.name}}
+    </button>
 </div>

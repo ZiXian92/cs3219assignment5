@@ -1,0 +1,68 @@
+<div *ngIf="loadingFinal" class="container-fluid wait-final">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="text-xs-center">We're still processing your request...stay on your seats please.</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="loader"></div>
+    </div>
+</div>
+
+<div *ngIf="!loadingFinal" class="row pl-0">
+    <div class="col-xs-6">
+        <h5>Final version statistics</h5>
+        <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Filter by name"
+            [(ngModel)]="filterKey" 
+            (ngModelChange)="filter(filterKey)">
+        <div class="table-responsive final-data-table">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th (click)="toggleSort('name')">
+                            Name
+                            <span *ngIf="sortOption.type === 'name' && sortOption.downwards">&#x25BC;</span>
+                            <span *ngIf="sortOption.type === 'name' && !sortOption.downwards">&#x25B2;</span>
+                        </th>
+                        <th (click)="toggleSort('rows')">
+                            Rows
+                            <span *ngIf="sortOption.type === 'rows' && sortOption.downwards">&#x25BC;</span>
+                            <span *ngIf="sortOption.type === 'rows' && !sortOption.downwards">&#x25B2;</span>
+                        </th>
+                        <th (click)="toggleSort('comments')">
+                            % in comments
+                            <span *ngIf="sortOption.type === 'comments' && sortOption.downwards">&#x25BC;</span>
+                            <span *ngIf="sortOption.type === 'comments' && !sortOption.downwards">&#x25B2;</span>
+                        </th>
+                        <th (click)="toggleSort('stability')">
+                            Stability
+                            <span *ngIf="sortOption.type === 'stability' && sortOption.downwards">&#x25BC;</span>
+                            <span *ngIf="sortOption.type === 'stability' && !sortOption.downwards">&#x25B2;</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let finalUser of displayFinalData">
+                        <th scope="row">{{finalUser.name}}</th>
+                        <td>{{finalUser.rows}}</td>
+                        <td>{{finalUser.percentage_in_comments}}</td>
+                        <td>{{finalUser.stability}}</td>
+                    </tr>
+                </tbody>
+          </table>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <h5 class="text-xs-center">Top {{topN}} contributors that made the final release possible</h5>
+        <div *ngIf="pieData" style="display: block">
+            <canvas baseChart
+                [data]="pieData.pieChartData"
+                [labels]="pieData.pieChartLabels"
+                [chartType]="pieData.pieChartType"> 
+            </canvas>
+        </div>
+    </div>  
+</div>

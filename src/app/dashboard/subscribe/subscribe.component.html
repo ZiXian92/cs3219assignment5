@@ -1,41 +1,65 @@
-<h3>Subscribe to <span class="logo">Git Guard</span>!</h3>
-<p>You will receive reminders once a week to check back to Git Guard</p>
-<p>Add your friends in and we'll keep them in the loop too!</p>
-
-<div class="row">
-    <div class="col-xs-3">
-        <input 
-            class="form-control" 
-            type="email" 
-            placeholder="john.doe@gitguard.com" 
-            *ngFor="let email of emails; let i = index; trackBy: trackByIndex"
-            [(ngModel)]="emails[i]"
-            required/>
+<div class="px-1">    
+    <div *ngIf="showError" class="row">
+        <div class="col-xs-12 pl-0">
+            <div class="alert alert-danger" role="alert">
+            Please make sure all of the emails are valid
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+          You're all set! GitGuard will now remind you to check in!
+        </div>
+    </div>
+    <div class="row">
+        <h5>Subscribe to <span class="logo">Git Guard</span>!</h5>
+    </div>
+    <div class="row">
+        <p>You will receive reminders once a week to check back to Git Guard</p>
+    </div>
+    <div class="row">
+        <p>Add your friends in and we'll keep them in the loop too!</p>
     </div>
 
-    <div class="col-xs-1">
-        <button 
-            class="btn btn-secondary"
-            (click)="addField()">
-            <md-icon>add</md-icon>
-        </button>
-
-        <button 
-            *ngIf="emails.length > 1" 
-            class="btn btn-secondary"
-            (click)="removeField(email)">
-            <md-icon>remove</md-icon>
-        </button>
-
+    <div class="row" *ngFor="let email of emails; let i = index; trackBy: trackByIndex">
+        <div class="col-xs-6 pl-0">
+            <div class="input-group">
+                <input 
+                    type="email" 
+                    id="githubRepoLink" 
+                    name="githubRepoLink" 
+                    class="form-control px-1"
+                    placeholder="Enter an email"
+                    [(ngModel)]="emails[i]"
+                    required> 
+                <span 
+                    *ngIf="i === 0"
+                    class="input-group-btn">
+                    <button class="btn btn-secondary px-2" 
+                    type="button" 
+                    (click)="addField()">
+                        <md-icon>add</md-icon>
+                    </button>
+                </span>
+                <span 
+                    *ngIf="i === 1"
+                    class="input-group-btn">
+                    <button class="btn btn-secondary px-2" 
+                    type="button" 
+                    (click)="removeField(email)">
+                        <md-icon>remove</md-icon>
+                    </button>
+                </span>
+            </div>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-xs-3">
-        <button 
-            class="btn btn-success"
-            (click)="subscribe()">
-            Subscribe
-        </button>
-        <span *ngIf="showError">Please make sure all of the emails are valid</span>
+    <div class="row">
+        <div class="col-xs-6 pl-0">
+            <button 
+                class="btn btn-outline-success btn-block my-1"
+                (click)="subscribe()">
+                Subscribe
+            </button>
+        </div>
     </div>
 </div>

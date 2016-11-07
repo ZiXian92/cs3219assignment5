@@ -1,5 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
+import * as _ from 'lodash';
+
 @Component({
   selector: 'multi-select',
   templateUrl: 'multi-select.component.html'
@@ -12,7 +14,9 @@ export class MultiSelectComponent implements OnChanges {
 
   @Input() selectedItemList: any[];
 
+  filterKey;
   selectList: any[] = [];
+  displaySelectList: any[] = [];
 
   ngOnChanges(changes) :void {
     var newItemList = changes.itemList.currentValue;
@@ -25,6 +29,7 @@ export class MultiSelectComponent implements OnChanges {
           selected: false
         });
       }
+      this.displaySelectList = this.selectList;
     }
   }
 
@@ -37,4 +42,16 @@ export class MultiSelectComponent implements OnChanges {
     }
     select.selected = !select.selected;
   }
+
+  filter(filterKey) {
+    if(filterKey) {
+      filterKey = filterKey.toLowerCase();
+      this.displaySelectList = _.filter(this.selectList, function(o :any) {
+        return o.name.toLowerCase().indexOf(filterKey) >= 0 ? true : false
+    });
+    } else {
+      this.displaySelectList = this.selectList;
+    }
+  }
+
 }

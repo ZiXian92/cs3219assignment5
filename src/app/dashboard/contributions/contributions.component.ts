@@ -3,6 +3,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { GithubService } from '../../services/github.service';
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'contributions',
     templateUrl: 'contributions.component.html'
@@ -12,11 +14,13 @@ export class ContributionsComponent implements OnInit{
     	private githubService: GithubService
    	) {}
 
+	private openDropdown = false;
 	private barCharts;
 	private displayBarCharts;
-	private totalContributorsCount;
-	private onScreenChart = 2;
-	private peopleOnChart = 4;
+	private sortSelect;
+	private onScreenChart = 1;
+	private peopleOnChart = 8;
+	private response;
 	private peopleRange = {
 		start: null,
 		end: null
@@ -29,21 +33,60 @@ export class ContributionsComponent implements OnInit{
 		var type = "contributorsSummary";
 		var params = {};
 		var apiString = this.githubService.buildApiString(type, params);
-		this.githubService.callApi(apiString)
+		this.githubService.get(apiString)
         .subscribe(function(response) {
-        	this.totalContributorsCount = response.length;
-    	   	this.barCharts = this.createBarChartData(response);
-    	   	var defaultCharts = [];
-    	   	for(var i = 0; i < this.barCharts.length && i < this.onScreenChart; i++) {
-    	   		defaultCharts.push(this.barCharts[i]);
-    	   	}
-    	   	this.currentChartIndex = 0;
-    	   	this.peopleRange = {
-    	   		start: 1,
-    	   		end: defaultCharts.length * this.peopleOnChart
-    	   	}
-    	   	this.updateCharts(defaultCharts);
+        	this.response = response;
+        	var sortedContributors = this.sortContributors(response, 'commits');
+        	this.initializeVisualization(sortedContributors);
         }.bind(this));
+	}
+
+	public sortContributors(data, type) {
+		var sortBy;
+		var sortedData = data;
+		switch(type) {
+			case 'commits':
+				sortBy = type;
+				this.sortSelect = "Commits";
+				break;
+			case 'additions':
+				sortBy = type;
+				this.sortSelect = "Additions";
+				break;
+			case 'deletions':
+				sortBy = type;
+				this.sortSelect = "Deletions";
+				break;
+		}
+
+		if(sortBy) {
+			sortedData = _.orderBy(data, sortBy, 'desc');
+		}
+		return sortedData;
+	}
+
+	public initializeVisualization(data) {
+	   	this.barCharts = this.createBarChartData(data);
+	   	var defaultCharts = [];
+	   	for(var i = 0; i < this.barCharts.length && i < this.onScreenChart; i++) {
+	   		defaultCharts.push(this.barCharts[i]);
+	   	}
+	   	this.currentChartIndex = 0;
+	   	this.peopleRange = {
+	   		start: 1,
+	   		end: defaultCharts.length * this.peopleOnChart
+	   	}
+	   	this.updateCharts(defaultCharts);
+	   	this.showData = [true, true, true];
+	}
+
+	public changeSorting(type) {
+		if(this.sortSelect != type) {
+			var sortedContributors = this.sortContributors(this.response, type);
+        	this.initializeVisualization(sortedContributors);
+			this.sortSelect = type;
+		}
+		this.openDropdown = false;
 	}
 
 	public updateCharts(charts) {
@@ -58,6 +101,7 @@ export class ContributionsComponent implements OnInit{
 			// Start a new set
 			if(i % this.peopleOnChart === 0) {
 				barChart = {
+					index: barCharts.length,
 					barChartLabels: [],
 					barChartType: 'bar',
 					barChartLegend: true,
@@ -82,42 +126,55 @@ export class ContributionsComponent implements OnInit{
 		return barCharts;
 	}
 
-	public nextChart() {
-		var nextTwoCharts = [];
-		for(var i = this.currentChartIndex + this.onScreenChart; i < this.barCharts.length; i++) {
-			if(nextTwoCharts.length === this.onScreenChart) {
+	public getChartsAtIndex(index, barCharts) {
+		var charts = [];
+		console.log(barCharts.length);
+		for(var i = index; i >= 0 && i < barCharts.length; i++) {
+			if(charts.length === this.onScreenChart) {
 				break;
 			}
-			nextTwoCharts.push(this.barCharts[i]);
-		} 
+			charts.push(barCharts[i]);
+		}
+		return charts;
+	}
+
+	public nextChart() {
+		var nextTwoCharts = this.getChartsAtIndex(
+					this.currentChartIndex + this.onScreenChart,
+					this.barCharts);
 		if(nextTwoCharts.length > 0) {
 			this.currentChartIndex += this.onScreenChart;
-			this.updateCharts(nextTwoCharts);
 			this.peopleRange = {
 				start: this.currentChartIndex * this.peopleOnChart + 1,
 				end: (this.currentChartIndex + nextTwoCharts.length) * this.peopleOnChart
 			}
-			this.showData = [true, true, true];
+			nextTwoCharts = this.filterData(nextTwoCharts);
+			this.updateCharts(nextTwoCharts);
 		}
 	}
 
 	public previousChart() {
-		var previousTwoCharts = [];
-		for(var i = this.currentChartIndex - this.onScreenChart; i >= 0; i++) {
-			if(previousTwoCharts.length === this.onScreenChart) {
-				break;
-			}
-			previousTwoCharts.push(this.barCharts[i]);
-		} 
+		var previousTwoCharts = this.getChartsAtIndex(
+					this.currentChartIndex - this.onScreenChart,
+					this.barCharts);
 		if(previousTwoCharts.length > 0) {
 			this.currentChartIndex -= this.onScreenChart;
-			this.updateCharts(previousTwoCharts);
 			this.peopleRange = {
 				start: this.currentChartIndex * this.peopleOnChart + 1,
 				end: (this.currentChartIndex + previousTwoCharts.length) * this.peopleOnChart
 			}
-			this.showData = [true, true, true];
+			previousTwoCharts = this.filterData(previousTwoCharts);
+			this.updateCharts(previousTwoCharts);
 		}
+	}
+
+	public filterData(charts) {
+		for(var i = 0; i < this.showData.length; i++) {
+			if(!this.showData[i]) {
+				charts = this.removeSeries(i, charts);
+			}
+		}
+		return charts;
 	}
 
 	public toggleData(index) {
@@ -134,13 +191,17 @@ export class ContributionsComponent implements OnInit{
 		} else {
 			this.displayBarCharts = this.addSeries(index, this.displayBarCharts);
 		}
-		let clone = JSON.parse(JSON.stringify(this.displayBarCharts));
-		this.displayBarCharts = clone;
+
+		this.updateCharts(this.displayBarCharts);
 	}
 
 	public removeSeries(index, displayBarCharts) {
 		
 		var removeLabel;
+
+		var clone = JSON.parse(JSON.stringify(displayBarCharts));
+		displayBarCharts = clone;
+
 		switch(index) {
 			case 0:
 				removeLabel = "Commits";
@@ -154,45 +215,42 @@ export class ContributionsComponent implements OnInit{
 		}
 
 		for(var i = 0; i < displayBarCharts.length; i++) {
-
 			var numberOfData = displayBarCharts[i].barChartData.length;
 			for(var j = 0; j < numberOfData; j++) {
 				if(displayBarCharts[i].barChartData[j].label === removeLabel) {
 					displayBarCharts[i].barChartData.splice(j, 1);
+					displayBarCharts[i].barChartData = 
+							this.sortByDataType(displayBarCharts[i].barChartData);
 					break;
 				}
 			}
 		}
-		return displayBarCharts
+		return displayBarCharts;
 	}
 
 
 	public addSeries(index, displayBarCharts) {
 		for(var i = 0; i < displayBarCharts.length; i++) {
-			console.log("adding " + this.barCharts[i].barChartData[index].label);
 			displayBarCharts[i].barChartData
-					.push(this.barCharts[i].barChartData[index]);
+					.push(this.barCharts[displayBarCharts[i].index].barChartData[index]);
+			displayBarCharts[i].barChartData = 
+					this.sortByDataType(displayBarCharts[i].barChartData);
+					
 		}
 		return displayBarCharts;
 	}
 
-	// Bar chart
-	public barChartOptions:any = {
-		scaleShowVerticalLines: false,
-		responsive: true
-	};
-	public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-	public barChartType:string = 'bar';
-	public barChartLegend:boolean = true;
-
-	public barChartData:any[] = [
-		{data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-		{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-		{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series C'}
-	];
-
-	// Pie chart
-	public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
-	public pieChartData:number[] = [300, 500, 100];
-	public pieChartType:string = 'pie';
+	public sortByDataType(barChartData) {
+		var sortedBarChartData = _.sortBy(barChartData, function(o :any) {
+			switch(o.label) {
+				case "Commits":
+					return 0;
+				case "Additions":
+					return 1;
+				case "Deletions":
+					return 2;
+			}
+		});
+		return sortedBarChartData;
+	}
 }

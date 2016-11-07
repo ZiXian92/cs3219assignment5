@@ -2,35 +2,36 @@
     <div class="row h-100 flex-items-xs-middle">
         <div class="container">
             <div class="row">
-                <div class="col-xs-8 login-main">
-                    <div class="row">
+                <div class="col-xs-10 mx-auto login-main">
+                    <div class="row py-2">
                         <h1 class="logo">Git Guard</h1>
                     </div>
+                    <img class="inspecto-cat" src="../../assets/inspectocat.png">
                     <form 
                         class="container-fluid"
                         (ngSubmit)="onLinkFormSubmit()" #linkForm="ngForm">
-                        <div class="row">
-                            <h4 class="sub-text"><b>Welcome, User!</b></h4>
+                        <div class="row pt-1">
+                            <h5 class="sub-text"><b>Welcome back, User!</b></h5>
                         </div>
-                        <div class="row">
+                        <div class="row pt-1">
                             <h5 class="sub-text">Enter a link for a Github repository</h5>
                         </div>
-                        <div class="row">
-                            <p class="sub-text"><i>Don't worry, you can change it later</i></p>
+                        <div class="row pt-1">
+                            <h5 class="sub-text"><i>Don't worry, you can change it later</i></h5>
                         </div>
-                        <div class="row">
+                        <div class="row pt-1">
                             <div class="col-xs-9 githubRepoLinkCol">
                                 <input 
                                 type="text" 
                                 id="githubRepoLink" 
                                 name="githubRepoLink"
-                                class="form-control" 
+                                class="form-control big-control" 
                                 placeholder="Github Repository Link"
                                 [(ngModel)]="githubRepoLink" 
                                 required>
                             </div>
                             <div class="col-xs-3 githubRepoLinkCol">
-                                <button class="btn btn-github" type="submit">Start Guarding!</button>
+                                <button class="btn btn-github big-button" type="submit">Start Guarding!</button>
                             </div>
                         </div>
                     </form>

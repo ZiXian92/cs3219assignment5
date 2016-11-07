@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
 
+import { GithubService } from '../../services/github.service';
+
 @Component({
     selector: 'subscribe',
     templateUrl: 'subscribe.component.html'
 })
 export class SubscribeComponent{
 	constructor(
+        private githubService: GithubService
    	) {}
 
     private emails = [""];
 
     private showError = false;
+    private showSuccess = false;
 
     trackByIndex(index, email) {
-        console.log(email);
         return index;
     }
 
@@ -27,8 +30,16 @@ export class SubscribeComponent{
 
     subscribe() :void {
         if(this.validEmails(this.emails)) {
-            console.log("Subscribing...");
-            this.resetForm();
+            var apiString = this.githubService.buildApiString('subscribe', {});
+            var body = {
+                email: this.emails
+            }
+            console.log(body);
+            this.githubService.post(apiString, body)
+            .subscribe(function(response) {
+                this.showSuccess = true;
+                this.resetForm();
+            });
         } else {
             this.showError = true;
         }
