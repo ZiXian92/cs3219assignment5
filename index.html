@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Git Guard by ZiXian92</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Git Guard</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/ZiXian92/cs3219assignment5" class="btn">View on GitHub</a>
+      <a href="https://github.com/ZiXian92/cs3219assignment5/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ZiXian92/cs3219assignment5/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="cs3219-assignment-5-git-guard" class="anchor" href="#cs3219-assignment-5-git-guard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CS3219 Assignment 5 Git Guard</h1>
+
+<p>Analyze contributions on any public repository</p>
+
+<h2>
+<a id="development-system-requirements" class="anchor" href="#development-system-requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development System Requirements</h2>
+
+<ul>
+<li>NodeJS with <code>mocha</code>, <code>typescript</code>, <code>typings</code> and <code>rimraf</code> installed globally OR<br>
+</li>
+<li>Docker and Docker-Compose</li>
+</ul>
+
+<h2>
+<a id="directory-structure" class="anchor" href="#directory-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Directory Structure</h2>
+
+<pre><code>root  
+|_ dataentities // All data definition classes and interfaces here
+|_ datalogic // All data manipulation/computation logic components here
+|_ tests // All unit tests here
+|_ server // Server-side code here  
+   |_ api // All API endpoint handlers here  
+   |_ auth // Authentication-related code here
+|_ src  // Angular2 and other front-end code here
+|_ config // Webpack configuration files here  
+|_ misc  // Miscellaneous helper code here
+</code></pre>
+
+<h2>
+<a id="local-setup" class="anchor" href="#local-setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Local Setup</h2>
+
+<ol>
+<li>Clone the repository.</li>
+<li>Change directory to project root.</li>
+<li>Run <code>npm install</code>.
+4&gt; Run <code>typings install</code>.</li>
+</ol>
+
+<h2>
+<a id="docker-setup" class="anchor" href="#docker-setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Docker Setup</h2>
+
+<ol>
+<li>Clone the repository.</li>
+<li>Change directory to project root and run <code>docker-compose up -d --build</code>.</li>
+<li>Enter the container with <code>docker-compose exec app bash</code> to run any Typescript compilation or Mocha tests(<code>npm test</code>).</li>
+<li>Run <code>npm install</code>.</li>
+<li>Run <code>typings install</code>.</li>
+</ol>
+
+<h2>
+<a id="workflow" class="anchor" href="#workflow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Workflow</h2>
+
+<ol>
+<li>Work on a branch that is not <code>master</code> or <code>develop</code> to avoid polluting them with conflicts or broken code.</li>
+<li>Keep your branch up-to-date by running <code>git fetch origin</code>, <code>git rebase origin/develop</code>.</li>
+<li>After pulling from upstream, run <code>npm install &amp;&amp; typings install</code> in your chosen setup.</li>
+<li>Create pull request to <code>develop</code> when done. Merge only happens after passing CI.</li>
+</ol>
+
+<h2>
+<a id="testing-single-unit-test-file" class="anchor" href="#testing-single-unit-test-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing Single Unit Test File</h2>
+
+<ol>
+<li>In the NodeJS environment(local or Docker), run <code>tsc</code>, followed by <code>mocha compiled/tests/&lt;compiled_test_file_path&gt;</code>.</li>
+</ol>
+
+<h2>
+<a id="continuous-integration" class="anchor" href="#continuous-integration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Continuous Integration</h2>
+
+<p>CI is done using free account on Shippable. CI tests are triggered only during pull requests. Log in to Shippable and select this project to view build results on console.  </p>
+
+<h2>
+<a id="faqs" class="anchor" href="#faqs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FAQs</h2>
+
+<ol>
+<li>
+<strong>Typescript compiler doesn't recognize a NodeJS module.</strong><br>
+Probably it requires type definition for that module. Google around for module <code>@types/&lt;module_name&gt;</code>. If it exists, run <code>npm install --save-dev @types/&lt;module_name&gt;</code>. Otherwise, Google around(not sure of any standard way to resolve this).</li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ZiXian92/cs3219assignment5">Git Guard</a> is maintained by <a href="https://github.com/ZiXian92">ZiXian92</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
