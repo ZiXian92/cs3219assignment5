@@ -10,7 +10,7 @@ import { secret } from '../secret';
 
 export const SubscribeRouter = Router();
 
-SubscribeRouter.post('/', (req: Request, res: Response, next: NextFunction): void => {
+SubscribeRouter.post('/:owner/:repo', (req: Request, res: Response, next: NextFunction): void => {
   var AWS = require('aws-sdk');
   let s: secret = new secret();
   AWS.config.update({
@@ -22,9 +22,10 @@ SubscribeRouter.post('/', (req: Request, res: Response, next: NextFunction): voi
   var lambda = new AWS.Lambda();
   var params = {
     FunctionName: 'updateEmailList', 
-    Payload: JSON.stringify({ email: req.body.email })
+    Payload: JSON.stringify({ email: req.body.email, url: "https://github.com/" + req.params.owner + "/" + req.params.repo})
 	// Payload: "[\"email\": \"jasontanma@hotmail.com\"]"
   };
+  console.log(params);
   lambda.invoke(params, function(err, data) {
 	if(data['FunctionError']) {
 	  return res.sendStatus(400);
