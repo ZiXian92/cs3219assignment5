@@ -11,4 +11,5 @@ install:
   - typings install
 
 script:
+  - cp dummy.secret.ts server/secret.ts
   - npm test

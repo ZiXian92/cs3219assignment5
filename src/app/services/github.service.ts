@@ -20,7 +20,7 @@ export class GithubService implements OnInit {
     weeklyContributions: "/contributors/{{owner}}/{{repo}}/weekly",
     fileListing: "/trees/{{owner}}/{{repo}}",
     detailedCommits: "/commits/{{owner}}/{{repo}}/changes",
-    subscribe: "/subscribe",
+    subscribe: "/subscribe/{{owner}}/{{repo}}",
     final: "/final/{{owner}}/{{repo}}"
   }
 
