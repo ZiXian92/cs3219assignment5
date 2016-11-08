@@ -30,15 +30,25 @@ export class ContributionsComponent implements OnInit{
 	private showData = [true, true, true];
 
 	ngOnInit(): void {
+		this.initialize();
+		// When link changes, reinitialize
+		this.githubService.githubRepoLink$.subscribe(
+			(githubRepoLink: string) => {
+				this.initialize();
+			}
+		);
+	}
+
+	public initialize() {
 		var type = "contributorsSummary";
 		var params = {};
 		var apiString = this.githubService.buildApiString(type, params);
 		this.githubService.get(apiString)
-        .subscribe(function(response) {
-        	this.response = response;
-        	var sortedContributors = this.sortContributors(response, 'commits');
-        	this.initializeVisualization(sortedContributors);
-        }.bind(this));
+		.subscribe(function(response) {
+			this.response = response;
+			var sortedContributors = this.sortContributors(response, 'commits');
+			this.initializeVisualization(sortedContributors);
+		}.bind(this));
 	}
 
 	public sortContributors(data, type) {
