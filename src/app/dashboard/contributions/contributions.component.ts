@@ -72,9 +72,15 @@ export class ContributionsComponent implements OnInit{
 	   		defaultCharts.push(this.barCharts[i]);
 	   	}
 	   	this.currentChartIndex = 0;
+	   	if(defaultCharts[0]) {
 	   	this.peopleRange = {
-	   		start: 1,
-	   		end: defaultCharts.length * this.peopleOnChart
+		   		start: Math.min(1, defaultCharts[0].barChartLabels.length),
+		   		end: defaultCharts[0].barChartLabels.length
+		   	}
+	   	} else {
+	   		this.peopleRange = {
+	   			start: 0, end: 0
+	   		}
 	   	}
 	   	this.updateCharts(defaultCharts);
 	   	this.showData = [true, true, true];
