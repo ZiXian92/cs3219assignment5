@@ -31,7 +31,11 @@ export class FinalComponent implements OnInit {
             this.githubService.finalData$.subscribe(
                 function(finalData: string) {
                     this.finalData = finalData;
-                    this.initializeVisualization();
+                    if(this.finalData) {
+                        this.initializeVisualization();
+                    } else {
+                        console.log('Opps');
+                    }
                 }.bind(this));
         }
     }
@@ -109,7 +113,7 @@ export class FinalComponent implements OnInit {
             pieChartData: [],
             pieChartType: 'pie'
         };
-        for(var i = 0; i < this.topN; i++) {
+        for(var i = 0; i < topNByRows.length; i++) {
             pieData.pieChartLabels.push(topNByRows[i].name);
             pieData.pieChartData.push(topNByRows[i].rows);
         }
